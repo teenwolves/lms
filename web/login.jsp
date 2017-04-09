@@ -1,7 +1,7 @@
 <%-- 
     Document   : login
     Created on : Apr 9, 2017, 10:32:02 AM
-    Author     : Sudarshana Panditha
+    Author     : https://github.com/teenwolves
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>

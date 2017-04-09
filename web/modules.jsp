@@ -1,7 +1,7 @@
 <%-- 
     Document   : modules
     Created on : Apr 9, 2017, 11:02:25 AM
-    Author     : Sudarshana Panditha
+    Author     : https://github.com/teenwolves
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
