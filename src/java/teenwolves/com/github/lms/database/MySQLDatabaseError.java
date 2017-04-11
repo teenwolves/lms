@@ -1,4 +1,4 @@
-package database;
+package teenwolves.com.github.lms.database;
 
 /**
  * <code>MySQLDatabaseError</code> is an <code>enum</code>,
