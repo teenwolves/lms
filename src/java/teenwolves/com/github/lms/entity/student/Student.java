@@ -17,6 +17,10 @@ public class Student extends User implements Serializable{
         studentId = "";
     }
 
+    public Student(String studentId) {
+        this.studentId = studentId;
+    }
+
     public String getStudentId() {
         return studentId;
     }
