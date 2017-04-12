@@ -3,19 +3,19 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package teenwolves.com.github.lms.entity.repository.userrepository;
+package teenwolves.com.github.lms.entity.userrepository.lmsuserrepository;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import teenwolves.com.github.lms.entity.User;
-import teenwolves.com.github.lms.entity.repository.AbstractUserRepository;
-import teenwolves.com.github.lms.entity.repository.RepositoryException;
+import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
+import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
-import teenwolves.com.github.lms.entity.repository.RepositoryError;
-import teenwolves.com.github.lms.entity.repository.UserSpecification;
+import teenwolves.com.github.lms.repository.RepositoryError;
+import teenwolves.com.github.lms.entity.userrepository.UserSpecification;
 
 /**
  *

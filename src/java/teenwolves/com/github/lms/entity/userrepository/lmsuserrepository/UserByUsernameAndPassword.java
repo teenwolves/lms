@@ -3,10 +3,10 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package teenwolves.com.github.lms.entity.repository.userrepository;
+package teenwolves.com.github.lms.entity.userrepository.lmsuserrepository;
 
 import teenwolves.com.github.lms.entity.User;
-import teenwolves.com.github.lms.entity.repository.UserSpecification;
+import teenwolves.com.github.lms.entity.userrepository.UserSpecification;
 
 /**
  *

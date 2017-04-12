@@ -1,5 +1,6 @@
-package teenwolves.com.github.lms.entity.repository;
+package teenwolves.com.github.lms.entity.userrepository;
 
+import teenwolves.com.github.lms.repository.RepositoryException;
 import java.util.List;
 import teenwolves.com.github.lms.entity.User;
 
