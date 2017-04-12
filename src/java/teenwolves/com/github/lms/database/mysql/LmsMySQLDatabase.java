@@ -15,8 +15,11 @@ import teenwolves.com.github.lms.database.MySQLDatabaseError;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 
 /**
- *
- * @author Sudarshana Panditha
+ * <code>LmsMySQLDatabase</code> is an implementation of the
+ * <code>MySQLDatabase</code> to access lms database.
+ * @author https://github.com/teenwolves
+ * @version 1.0
+ * @see MySQLDatabases
  */
 public class LmsMySQLDatabase implements MySQLDatabase{
     
