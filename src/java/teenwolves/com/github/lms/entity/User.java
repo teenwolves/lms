@@ -8,10 +8,11 @@ package teenwolves.com.github.lms.entity;
 import java.io.Serializable;
 
 /**
- *
- * @author Sudarshana Panditha
+ * <code>User</code> is a POJO class in the lms application.
+ * @author https://github.com/teenwolves
+ * @version 1.0
  */
-public abstract class User implements Serializable{
+public class User implements Serializable{
     private int id;
     private String name;
     private String username;
