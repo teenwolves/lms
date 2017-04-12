@@ -12,7 +12,6 @@ import java.util.List;
 import teenwolves.com.github.lms.entity.User;
 import teenwolves.com.github.lms.entity.repository.AbstractUserRepository;
 import teenwolves.com.github.lms.entity.repository.RepositoryException;
-import teenwolves.com.github.lms.entity.student.Student;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.repository.RepositoryError;
