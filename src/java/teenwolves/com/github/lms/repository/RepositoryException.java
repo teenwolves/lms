@@ -1,4 +1,4 @@
-package teenwolves.com.github.lms.entity.repository;
+package teenwolves.com.github.lms.repository;
 
 /**
  *

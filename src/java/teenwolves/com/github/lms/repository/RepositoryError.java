@@ -1,13 +1,11 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package teenwolves.com.github.lms.entity.repository;
+package teenwolves.com.github.lms.repository;
 
 /**
- *
- * @author Sudarshana Panditha
+ * <code>RepositoryError</code> is an <code>enum</code> representing common
+ * that causes a <code>RepositoryException</code>
+ * @author https://github.com/teenwolves
+ * @version 1.0
+ * @see RepositoryException
  */
 public enum RepositoryError {
     TECHNICAL_ERROR, NOT_FOUND
