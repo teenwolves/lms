@@ -6,7 +6,7 @@
 package teenwolves.com.github.lms.entity.lecturer;
 
 import java.io.Serializable;
-import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.user.User;
 
 /**
  * <code>Lecturer</code> is an POJO class which represents a Lecturer 

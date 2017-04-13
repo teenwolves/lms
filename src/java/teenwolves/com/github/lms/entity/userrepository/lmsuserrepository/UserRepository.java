@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.database.MySQLDatabase;

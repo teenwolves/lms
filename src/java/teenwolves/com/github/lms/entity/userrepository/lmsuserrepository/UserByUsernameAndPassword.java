@@ -5,7 +5,7 @@
  */
 package teenwolves.com.github.lms.entity.userrepository.lmsuserrepository;
 
-import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.userrepository.UserSpecification;
 
 /**

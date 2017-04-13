@@ -1,6 +1,6 @@
 package teenwolves.com.github.lms.entity.userrepository;
 
-import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.user.User;
 
 /**
  *

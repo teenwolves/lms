@@ -18,7 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
-import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerById;

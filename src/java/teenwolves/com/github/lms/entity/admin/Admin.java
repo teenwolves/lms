@@ -6,7 +6,7 @@
 package teenwolves.com.github.lms.entity.admin;
 
 import java.io.Serializable;
-import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.user.User;
 
 /**
  * <code>Admin</code> is a POJO class which extends 
