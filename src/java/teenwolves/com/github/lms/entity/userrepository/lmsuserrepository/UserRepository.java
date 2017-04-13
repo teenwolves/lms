@@ -106,15 +106,15 @@ public class UserRepository implements AbstractUserRepository{
     public void updateUser(User user) throws RepositoryException{
         StringBuilder query = new StringBuilder();
         query.append("UPDATE user SET ");
-        query.append("name = ");
+        query.append("name = '");
         query.append(user.getName());
-        query.append(", username = ");
+        query.append("', username = '");
         query.append(user.getUsername());
-        query.append(", password = ");
+        query.append("', password = '");
         query.append(user.getPassword());
-        query.append(", email = ");
+        query.append("', email = '");
         query.append(user.getEmail());
-        query.append(" WHERE id = ");
+        query.append("' WHERE id = ");
         query.append(user.getId());
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
