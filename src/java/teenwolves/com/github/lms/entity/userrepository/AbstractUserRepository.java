@@ -13,5 +13,9 @@ import teenwolves.com.github.lms.entity.User;
  */
 public interface AbstractUserRepository {
     
+    public void addUser(User user) throws RepositoryException;
+    public void updateUser(User user) throws RepositoryException;
+    public void deleteUser(User user) throws RepositoryException;
+    
     public List<User> query(UserSpecification specification) throws RepositoryException;
 }
