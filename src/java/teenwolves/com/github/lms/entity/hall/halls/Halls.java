@@ -5,11 +5,13 @@
  */
 package teenwolves.com.github.lms.entity.hall.halls;
 
+import java.io.Serializable;
+
 /**
  *
  * @author Sudarshana Panditha
  */
-public enum Halls {
+public enum Halls implements Serializable{
     LECTURE_HALL("lecture"),
     LAB("lab");
 
