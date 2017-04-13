@@ -10,7 +10,8 @@ package teenwolves.com.github.lms.repository;
 public enum RepositoryError {
     TECHNICAL_ERROR("We are unavailable at the moment. Please come back later."),  
     USER_NOT_FOUND("Please check your username/password."),
-    UNSUCCESSFUL_EXECUTION;
+    UNSUCCESSFUL_EXECUTION,
+    HALL_NOT_FOUND("Hall is not found.");
     
     // Message for displaying purposes
     private String errorMessage;
