@@ -8,13 +8,20 @@ package teenwolves.com.github.lms.repository;
  * @see RepositoryException
  */
 public enum RepositoryError {
-    TECHNICAL_ERROR("We are unavailable at the moment. Please come back later."), 
-    NOT_FOUND("Not found."),
-    USER_NOT_FOUND("Please check your username/password.");
+    TECHNICAL_ERROR("We are unavailable at the moment. Please come back later."),  
+    USER_NOT_FOUND("Please check your username/password."),
+    UNSUCCESSFUL_EXECUTION;
     
     // Message for displaying purposes
-    private final String errorMessage;
+    private String errorMessage;
 
+    /**
+     * Class constructor with no arguments
+     */
+    private RepositoryError() {
+        errorMessage = "";
+    }
+    
     /**
      * <code>Enum</code> constructor which takes a <code>String</code>
      * as an argument.
@@ -31,6 +38,14 @@ public enum RepositoryError {
      */
     public String getErrorMessage() {
         return errorMessage;
+    }
+
+    /**
+     * This method sets the error message of the occurred exception
+     * @param errorMessage of the <code>Exception</code>
+     */
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
     }
     
 }
