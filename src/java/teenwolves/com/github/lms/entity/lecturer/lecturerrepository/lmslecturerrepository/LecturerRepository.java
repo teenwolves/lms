@@ -80,12 +80,12 @@ public class LecturerRepository implements AbstractLecturerRepository{
         } catch (MySQLDatabaseException ex) {
             throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
         } catch (SQLException ex) {
-            throw new RepositoryException(RepositoryError.NOT_FOUND);
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
         
         // Throwing an Exception if no users are not found.
         if(lecturers == null){
-            throw new RepositoryException(RepositoryError.NOT_FOUND);
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
         return lecturers;
         

@@ -80,11 +80,11 @@ public class StudentRepository implements AbstractStudentRepository{
         } catch (MySQLDatabaseException ex) {
             throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
         } catch (SQLException ex) {
-            throw new RepositoryException(RepositoryError.NOT_FOUND);
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
         
         if(students == null){
-            throw new RepositoryException(RepositoryError.NOT_FOUND);
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
         
         return students;
