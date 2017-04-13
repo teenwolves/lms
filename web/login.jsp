@@ -14,6 +14,11 @@
 	<link rel="stylesheet" type="text/css" href="css/bootstrap.min.css">
     </head>
     <body>
+        <div class="container">
+            <div class="row">
+                <div class="col-xs-12"><p>${message}</p></div>
+            </div>
+        </div>
 <div class="containers">
     <div class="row">
     <section class="col-xs-12">
