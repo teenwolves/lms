@@ -7,11 +7,33 @@ package teenwolves.com.github.lms.login;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import teenwolves.com.github.lms.database.MySQLDatabase;
+import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.User;
+import teenwolves.com.github.lms.entity.lecturer.Lecturer;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerById;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
+import teenwolves.com.github.lms.entity.student.Student;
+import teenwolves.com.github.lms.entity.student.studentrepository.AbstractStudentRepository;
+import teenwolves.com.github.lms.entity.student.studentrepository.lmsstudentrepository.StudentById;
+import teenwolves.com.github.lms.entity.student.studentrepository.lmsstudentrepository.StudentRepository;
+import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
+import teenwolves.com.github.lms.repository.RepositoryError;
+import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserByUsernameAndPassword;
+import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
+import teenwolves.com.github.lms.login.utility.LoginUtility;
+import teenwolves.com.github.lms.util.Utility;
 
 /**
  * LoginServlet is a controller class for login validations
@@ -20,6 +42,23 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
+    // AbstractUserRepository to access Database
+    private AbstractUserRepository userRepository;
+    private AbstractStudentRepository studentRepository;
+    private AbstractLecturerRepository lecturerRepository;
+            
+    
+    // Setting up a Repository
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        MySQLDatabase database = new LmsMySQLDatabase();
+        userRepository = new UserRepository(database);
+        studentRepository = new StudentRepository(database);
+        lecturerRepository = new LecturerRepository(database);
+    }
+    
+    
     
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -59,7 +98,7 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doPost(request, response);
     }
 
     /**
@@ -73,7 +112,107 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // local variables to instantiate a User
+        User user = null;
+        Student student = null;
+        Lecturer lecturer = null;
+        
+        // Retrieving form data
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        
+        // General Validations
+        if(Utility.hasPresence(username) && Utility.hasPresence(password)){
+            try {
+                // Formatting the inputs
+                username = Utility.inputFormat(username);
+                password = Utility.inputFormat(password);
+                
+                // Retrieving the user who matches username and password
+                List<User> users = userRepository.query(
+                        new UserByUsernameAndPassword(username, password));
+                
+                // User who matches the username and password
+                user = users.get(0);
+                
+                /*// Setting the user to the Session object
+                HttpSession session = request.getSession();
+                session.setAttribute("user", user);
+                
+                // Redirecting to the home page
+                response.sendRedirect("home.jsp");*/
+                
+            } catch (RepositoryException ex) {
+                String url = "/login.jsp";
+                LoginUtility.forwardError(getServletContext(), request, 
+                            response, url, ex.getError());
+                
+            }
+            
+            try {
+                // Checking if the user is a student
+                List<Student> students = studentRepository.query(
+                        new StudentById(user.getId()));
+                
+                student = students.get(0);
+                // Setting User attributes
+                student.setName(user.getName());
+                student.setEmail(user.getEmail());
+                student.setUsername(user.getUsername());
+                student.setPassword(user.getPassword());
+                
+                // Setting the user to the Session object
+                HttpSession session = request.getSession();
+                session.setAttribute("user", student);
+                
+                // Redirecting to the home page
+                response.sendRedirect("home.jsp");
+                
+            } catch (RepositoryException ex) {
+                
+                if(ex.getError() == RepositoryError.USER_NOT_FOUND){
+                    try {
+                        // Checking if the user is a lecturer
+                        List<Lecturer> lecturers = lecturerRepository.query(
+                                new LecturerById(user.getId()));
+                        
+                        lecturer = lecturers.get(0);
+                        
+                        // Setting User attributes
+                        lecturer.setName(user.getName());
+                        lecturer.setEmail(user.getEmail());
+                        lecturer.setUsername(user.getUsername());
+                        lecturer.setPassword(user.getPassword());
+                        
+                        // Setting the user to the Session object
+                        HttpSession session = request.getSession();
+                        session.setAttribute("user", lecturer);
+                        
+                        // Redirecting to the home page
+                        response.sendRedirect("home.jsp");
+                        
+                    } catch (RepositoryException ex1) {
+                        String url = "/login.jsp";
+                        LoginUtility.forwardError(getServletContext(), request, 
+                            response, url, ex.getError());
+                    }
+                    
+                }else{
+                    String url = "/login.jsp";
+                    LoginUtility.forwardError(getServletContext(), request, 
+                            response, url, ex.getError());
+                }
+                
+            }
+          
+        }else{
+            String url = "/login.jsp";
+            LoginUtility.forwardError(getServletContext(), request, 
+                            response, url, RepositoryError.USER_NOT_FOUND);
+        }
+        
+        
+        
     }
 
     /**
