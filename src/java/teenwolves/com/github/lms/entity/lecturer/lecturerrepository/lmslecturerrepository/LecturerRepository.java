@@ -18,6 +18,7 @@ import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLect
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.LecturerSpecification;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.repository.RepositoryUtility;
 
 /**
  * <code>LecturerRepository</code> class is an implementation of the 
@@ -36,7 +37,14 @@ public class LecturerRepository implements AbstractLecturerRepository{
     
     @Override
     public void addLecturer(Lecturer lecturer) throws RepositoryException{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO lecturer(");
+        query.append("id, lecturerid)");
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Lecturer is not added");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
@@ -46,7 +54,16 @@ public class LecturerRepository implements AbstractLecturerRepository{
 
     @Override
     public void deleteLecturer(Lecturer lecturer) throws RepositoryException{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM lecturer WHERE id=");
+        query.append(lecturer.getId());
+        query.append(" AND lecturerid=");
+        query.append(lecturer.getLecturerId());
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Lecturer is not deleted");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
