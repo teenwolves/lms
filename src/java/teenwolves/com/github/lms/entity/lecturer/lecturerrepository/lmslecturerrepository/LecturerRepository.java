@@ -39,7 +39,11 @@ public class LecturerRepository implements AbstractLecturerRepository{
     public void addLecturer(Lecturer lecturer) throws RepositoryException{
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO lecturer(");
-        query.append("id, lecturerid)");
+        query.append("id, lecturerid) VALUES(");
+        query.append(lecturer.getId());
+        query.append(",'");
+        query.append(lecturer.getLecturerId());
+        query.append("')");
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Lecturer is not added");
