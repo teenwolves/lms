@@ -9,6 +9,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import teenwolves.com.github.lms.entity.User;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.repository.RepositoryException;
@@ -16,6 +18,7 @@ import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.entity.userrepository.UserSpecification;
+import teenwolves.com.github.lms.repository.RepositoryUtility;
 
 /**
  *
@@ -32,6 +35,7 @@ public class UserRepository implements AbstractUserRepository{
     public UserRepository(MySQLDatabase database) {
         this.database = database;
     }
+    
     @Override
     public List<User> query(UserSpecification specification) throws RepositoryException {
         
@@ -75,6 +79,60 @@ public class UserRepository implements AbstractUserRepository{
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
         return users;
+    }
+
+    @Override
+    public void addUser(User user) throws RepositoryException{
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO user");
+        query.append("(name, username, password, email) ");
+        query.append("VALUES('");
+        query.append(user.getName());
+        query.append("','");
+        query.append(user.getUsername());
+        query.append("','");
+        query.append(user.getPassword());
+        query.append("','");
+        query.append(user.getEmail());
+        query.append("')");
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("User not added.");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
+    }
+
+    @Override
+    public void updateUser(User user) throws RepositoryException{
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE user SET ");
+        query.append("name = ");
+        query.append(user.getName());
+        query.append(", username = ");
+        query.append(user.getUsername());
+        query.append(", password = ");
+        query.append(user.getPassword());
+        query.append(", email = ");
+        query.append(user.getEmail());
+        query.append(" WHERE id = ");
+        query.append(user.getId());
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Update Unsuccessful");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
+    }
+
+    @Override
+    public void deleteUser(User user) throws RepositoryException{
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM user WHERE id=");
+        query.append(user.getId());
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Deletion Unsuccessful");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
     
 }
