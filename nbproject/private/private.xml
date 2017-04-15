@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/login/LoginServlet.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/repository/RepositoryError.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/login/admin/AdminLoginServlet.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/entity/admin/adminrepository/lmsadminrepository/AdminByUserId.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/entity/admin/adminrepository/lmsadminrepository/AdminRepository.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/entity/admin/adminbehaviour/AdminManager.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/entity/user/User.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/web/admin/login.jsp</file>
+            <file>file:/D:/codes/java%20netbeans/lms/web/login.jsp</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/entity/admin/adminbehaviour/lmsadminbehaviour/LmsAdminManager.java</file>
+            <file>file:/D:/codes/java%20netbeans/lms/src/java/teenwolves/com/github/lms/entity/lecturer/lecturerrepository/lmslecturerrepository/LecturerRepository.java</file>
+        </group>
+    </open-files>
+</project-private>
