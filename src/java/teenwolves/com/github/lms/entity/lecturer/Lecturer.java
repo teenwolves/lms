@@ -6,6 +6,8 @@
 package teenwolves.com.github.lms.entity.lecturer;
 
 import java.io.Serializable;
+import java.util.List;
+import teenwolves.com.github.lms.entity.module.Module;
 import teenwolves.com.github.lms.entity.user.User;
 
 /**
@@ -17,6 +19,7 @@ import teenwolves.com.github.lms.entity.user.User;
 public class Lecturer extends User implements Serializable{
     
     private String lecturerId;
+    private List<Module> modules;
 
     public Lecturer() {
         super();
