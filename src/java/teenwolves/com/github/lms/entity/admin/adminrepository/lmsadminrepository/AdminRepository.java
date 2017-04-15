@@ -110,7 +110,7 @@ public class AdminRepository implements AbstractAdminRepository{
     @Override
     public List<Admin> query(AdminSpecification specification) throws RepositoryException {
         List<Admin> admins = null;
-        String  query = "SELECT * FROM user";
+        String  query = "SELECT * FROM admin";
         
         try {
             // Connecting to the database
