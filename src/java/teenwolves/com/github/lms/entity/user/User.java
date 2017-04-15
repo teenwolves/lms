@@ -67,4 +67,12 @@ public class User implements Serializable{
         this.email = email;
     }
     
+    public void setAttributes(User user){
+        this.id = user.getId();
+        this.name = user.getName();
+        this.username = user.getUsername();
+        this.password = user.getPassword();
+        this.email = user.getEmail();
+    }
+    
 }
