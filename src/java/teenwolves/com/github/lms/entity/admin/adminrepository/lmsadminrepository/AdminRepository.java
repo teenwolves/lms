@@ -9,15 +9,22 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.LmsAdminManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.LmsLecturerManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.LmsModuleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.LmsScheduleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedAdminManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedLecturerManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedModuleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedScheduleManager;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AdminSpecification;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.repository.RepositoryUtility;
 
 /**
  *
@@ -38,17 +45,66 @@ public class AdminRepository implements AbstractAdminRepository{
 
     @Override
     public void addAdmin(Admin admin) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder query = new StringBuilder();
+        query.append("INSERT INTO admin(");
+        query.append("id, ");
+        query.append("adminid, ");
+        query.append("adminmanager, ");
+        query.append("lecturermanager, ");
+        query.append("schedulemanager, ");
+        query.append("modulemanager) VALUES(");
+        query.append(admin.getId());
+        query.append(", '");
+        query.append(admin.getAdminId());
+        query.append("', ");
+        query.append(admin.getAdminManager().toString());
+        query.append(", ");
+        query.append(admin.getLecturerManager().toString());
+        query.append(", ");
+        query.append(admin.getScheduleManager().toString());
+        query.append(", ");
+        query.append(admin.getModuleManager().toString());
+        query.append(")");
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Admin is not added");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
     public void updateAdmin(Admin admin) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder query = new StringBuilder();
+        query.append("UPDATE admin SET ");
+        query.append("adminid = '");
+        query.append(admin.getAdminId());
+        query.append("', adminmanager = ");
+        query.append(admin.getAdminManager().toString());
+        query.append(", lecturermanager = ");
+        query.append(admin.getLecturerManager().toString());
+        query.append(", schedulemanager = ");
+        query.append(admin.getScheduleManager().toString());
+        query.append(", modulemanager = ");
+        query.append(admin.getModuleManager().toString());
+        query.append(" WHERE id = ");
+        query.append(admin.getId());
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Admin is not updated");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
     public void deleteAdmin(Admin admin) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM admin WHERE id = ");
+        query.append(admin.getId());
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Admin is not deleted");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
@@ -70,6 +126,13 @@ public class AdminRepository implements AbstractAdminRepository{
                 admin.setId(rows.getInt("id"));
                 admin.setAdminId(rows.getString("adminid"));
                 
+                int adminManager = rows.getInt("adminmanager");
+                int lecturerManager = rows.getInt("lecturermanager");
+                int scheduleManager = rows.getInt("schedulemanager");
+                int moduleManager = rows.getInt("modulemanager");
+                
+                setAdminBehaviours(admin, adminManager, lecturerManager, scheduleManager, moduleManager);
+                
                 if(specification.specified(admin)){
                     if(admins == null){
                         admins = new ArrayList<>();
@@ -87,6 +150,33 @@ public class AdminRepository implements AbstractAdminRepository{
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
         return admins;
+    }
+
+    // Helper Methods
+    private void setAdminBehaviours( Admin admin, int adminManager, int lecturerManager, int scheduleManager, int moduleManager) {
+        if(adminManager == 1){
+            admin.setAdminManager(new LmsAdminManager());
+        }else{
+            admin.setAdminManager(new UnauthorizedAdminManager());
+        }
+        
+        if(lecturerManager == 1){
+            admin.setLecturerManager(new LmsLecturerManager());
+        }else{
+            admin.setLecturerManager(new UnauthorizedLecturerManager());
+        }
+        
+        if(scheduleManager == 1){
+            admin.setScheduleManager(new LmsScheduleManager());
+        }else{
+            admin.setScheduleManager(new UnauthorizedScheduleManager());
+        }
+        
+        if(moduleManager == 1){
+            admin.setModuleManager(new LmsModuleManager());
+        }else{
+            admin.setModuleManager(new UnauthorizedModuleManager());
+        }
     }
     
 }
