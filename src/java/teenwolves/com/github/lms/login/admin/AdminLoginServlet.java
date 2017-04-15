@@ -150,7 +150,7 @@ public class AdminLoginServlet extends HttpServlet {
         }
         
         // Admin found, redirecting to the admins home page
-        response.sendRedirect("admin/home.jsp");
+        response.sendRedirect("home.jsp");
     }
 
     /**
