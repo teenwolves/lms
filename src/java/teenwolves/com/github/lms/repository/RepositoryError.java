@@ -11,7 +11,10 @@ public enum RepositoryError {
     TECHNICAL_ERROR("We are unavailable at the moment. Please come back later."),  
     USER_NOT_FOUND("Please check your username/password."),
     UNSUCCESSFUL_EXECUTION,
-    HALL_NOT_FOUND("Hall is not found.");
+    HALL_NOT_FOUND("Hall is not found."),
+    COURSE_NOT_FOUND("Course is not found"),
+    SESSIONS_NOT_FOUND("Sessions not found"),
+    SCHEDULE_NOT_FOUND("Schedule is not found");
     
     // Message for displaying purposes
     private String errorMessage;
