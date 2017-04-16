@@ -10,12 +10,13 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Add Lecturer</title>
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/styles.css">
+        <%@include file="../includes/admincsslinks.jsp" %>
     </head>
     <body>
+        <%@include file="../includes/adminnav.jsp" %>
         <div class="container">
-		<div class="row">
+            <div class="row"><h1 class="col-xs-12">Add Lecturer</h1></div>
+            <div class="row">
 			<section class="col-xs-12">
 
 	<form class="form-horizontal">
@@ -45,7 +46,7 @@
 		</div>
 		<div class="form-group">
 			<div class="col-sm-10 col-sm-offset-2">
-				<input class="btn btn-default" type="submit" value="Submit">
+				<input class="btn btn-default" type="submit" value="Add Lecturer">
 			</div>
 		</div>
 	</form>
@@ -53,8 +54,6 @@
 			</section>
 		</div>
 	</div>
-        <script src="js/jquery-2.1.4.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/script.js"></script>
+        <%@include file="../includes/adminjsscripts.jsp" %>
     </body>
 </html>
