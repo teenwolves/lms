@@ -9,11 +9,11 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>lms</title>
-        <%@include file="includes/csslinks.jsp" %>
+        <title>lms admin</title>
+        <%@include file="../includes/admincsslinks.jsp" %>
     </head>
     <body>
-        <%@include file="includes/adminnav.jsp" %>
-        <%@include file="includes/jsscripts.jsp" %>
+        <%@include file="../includes/adminnav.jsp" %>
+        <%@include file="../includes/adminjsscripts.jsp" %>
     </body>
 </html>
