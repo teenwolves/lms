@@ -16,7 +16,9 @@ import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
 import teenwolves.com.github.lms.entity.lecturer.lecturerspecification.LecturerSpecification;
+import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.repository.RepositoryError;
@@ -81,19 +83,37 @@ public class LecturerRepository implements AbstractLecturerRepository{
     @Override
     public List<Lecturer> query(UserSpecification specification) throws RepositoryException {
         List<Lecturer> lecturers = null;
+        List<User> users = null;
         String query = "SELECT * FROM lecturer";
         
+        if(specification.getClass() == LecturerSpecification.class){
+            lecturers = specifyLecturers(query, specification);
+        }else{
+            try{
+                users = userRepository.query(specification);
+                lecturers = getUserLecturerIntersection(users, 
+                        specifyLecturers(query, new AllUsers()));
+            }catch(RepositoryException re){
+                throw re;
+            }
+        }
+        
+        return lecturers;
+        
+    }
+    
+    private List<Lecturer> specifyLecturers(String query, UserSpecification specification) throws RepositoryException{
+        List<Lecturer> lecturers = null;
         try {
             // Connecting to the database
             database.connect();
             
-            // Querying the database
+            // Retrieving data
             ResultSet rows = database.select(query);
             
-            // Creating the list of lecturers
+            // Creating the admin list
             Lecturer lecturer = null;
-            
-            while (rows.next()) {                
+            while(rows.next()){
                 lecturer = new Lecturer();
                 lecturer.setId(rows.getInt("id"));
                 
@@ -110,13 +130,25 @@ public class LecturerRepository implements AbstractLecturerRepository{
         } catch (SQLException ex) {
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
-        
-        // Throwing an Exception if no users are not found.
+        return lecturers;
+    }
+    
+    private List<Lecturer> getUserLecturerIntersection(List<User> users, List<Lecturer> lecturers) throws RepositoryException{
+        List<Lecturer> outputLecturers = null;
         if(lecturers == null){
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        }else{
+            outputLecturers = new ArrayList<>();
+            for(Lecturer lecturer: lecturers){
+                for(User user: users){
+                    if(user.equals(lecturer)){
+                        lecturer.setAttributes(user);
+                        outputLecturers.add(lecturer);
+                    }
+                }
+            }
         }
-        return lecturers;
-        
+        return outputLecturers;
     }
     
 }
