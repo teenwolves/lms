@@ -20,11 +20,11 @@ import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
 import teenwolves.com.github.lms.entity.admin.Admin;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
-import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminByUserId;
 import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
 import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
-import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserByUsernameAndPassword;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserByUsernameAndPassword;
 import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.login.utility.LoginUtility;
 import teenwolves.com.github.lms.repository.RepositoryError;
@@ -38,7 +38,6 @@ import teenwolves.com.github.lms.util.Utility;
 @WebServlet(name = "AdminLoginServlet", urlPatterns = {"/admin/login"})
 public class AdminLoginServlet extends HttpServlet {
     // Repositories to access Admin data
-    private AbstractUserRepository userRepository;
     private AbstractAdminRepository adminRepository;
     private MySQLDatabase database;
     
@@ -48,7 +47,6 @@ public class AdminLoginServlet extends HttpServlet {
         super.init();
         database = new LmsMySQLDatabase();
         adminRepository = new AdminRepository(database);
-        userRepository = new UserRepository(database);
     }
     
 
@@ -107,7 +105,6 @@ public class AdminLoginServlet extends HttpServlet {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
         
-        User user = null;
         Admin admin = null;
         
         
@@ -117,27 +114,16 @@ public class AdminLoginServlet extends HttpServlet {
                 username = Utility.inputFormat(username);
                 password = Utility.inputFormat(password);
                 
-                // Retrieving the user who matches username and password
-                List<User> users = userRepository.query(
-                        new UserByUsernameAndPassword(username, password));
+                // Retrieving the admin
+                List<Admin> admins = adminRepository.query(new UserByUsernameAndPassword(username, password));
                 
-                // User who matches the username and password
-                user = users.get(0);
-                
-                // Retrieving the corresponding admin to the user
-                List<Admin> admins = adminRepository.query(new AdminByUserId(user.getId()));
-                
-                // User who matches the user id
                 admin = admins.get(0);
-                
-                // Setting attributes in the user
-                admin.setAttributes(user);
                 
                 HttpSession session = request.getSession();
                 session.setAttribute("user", admin);
                 
             } catch (RepositoryException ex) {
-                
+                System.out.println(ex.getError().getErrorMessage());
                 String url = "/admin/login.jsp";
                 LoginUtility.forwardError(getServletContext(), request, 
                             response, url, ex.getError());
