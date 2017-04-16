@@ -2,6 +2,7 @@ package teenwolves.com.github.lms.entity.admin.adminrepository;
 
 import java.util.List;
 import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryException;
 
 /**
@@ -13,5 +14,5 @@ public interface AbstractAdminRepository {
     public void updateAdmin(Admin admin) throws RepositoryException;
     public void deleteAdmin(Admin admin) throws RepositoryException;
     
-    public List<Admin> query(AdminSpecification specification) throws RepositoryException;
+    public List<Admin> query(UserSpecification specification) throws RepositoryException;
 }

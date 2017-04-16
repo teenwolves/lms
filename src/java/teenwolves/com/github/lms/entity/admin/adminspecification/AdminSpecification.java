@@ -3,14 +3,15 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package teenwolves.com.github.lms.entity.admin.adminrepository;
+package teenwolves.com.github.lms.entity.admin.adminspecification;
 
 import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 
 /**
  *
  * @author Sudarshana Panditha
  */
-public interface AdminSpecification {
+public interface AdminSpecification extends UserSpecification{
     public boolean specified(Admin admin);
 }

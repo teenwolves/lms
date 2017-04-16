@@ -1,7 +1,9 @@
 package teenwolves.com.github.lms.entity.student.studentrepository;
 
+import teenwolves.com.github.lms.entity.student.studentspecification.StudentSpecification;
 import java.util.List;
 import teenwolves.com.github.lms.entity.student.Student;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryException;
 
 /**
@@ -17,7 +19,7 @@ public interface AbstractStudentRepository {
     public void updateStudent(Student student) throws RepositoryException;
     public void deleteStudent(Student student) throws RepositoryException;
     
-    public List<Student> query(StudentSpecification specification) 
+    public List<Student> query(UserSpecification specification) 
             throws RepositoryException;
     
 }

@@ -1,5 +1,6 @@
 package teenwolves.com.github.lms.entity.userrepository;
 
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import java.util.List;
 import teenwolves.com.github.lms.entity.user.User;

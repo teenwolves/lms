@@ -1,6 +1,7 @@
-package teenwolves.com.github.lms.entity.student.studentrepository;
+package teenwolves.com.github.lms.entity.student.studentspecification;
 
 import teenwolves.com.github.lms.entity.student.Student;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 
 /**
  *
@@ -9,6 +10,6 @@ import teenwolves.com.github.lms.entity.student.Student;
  * @author https://github.com/teenwolves
  * @version 1.0
  */
-public interface StudentSpecification {
+public interface StudentSpecification extends UserSpecification{
     public boolean specified(Student student);
 }

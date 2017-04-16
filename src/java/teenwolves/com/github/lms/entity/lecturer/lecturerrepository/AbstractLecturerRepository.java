@@ -5,8 +5,10 @@
  */
 package teenwolves.com.github.lms.entity.lecturer.lecturerrepository;
 
+import teenwolves.com.github.lms.entity.lecturer.lecturerspecification.LecturerSpecification;
 import java.util.List;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryException;
 
 /**
@@ -20,5 +22,5 @@ public interface AbstractLecturerRepository {
     public void updateLecturer(Lecturer lecturer) throws RepositoryException;
     public void deleteLecturer(Lecturer lecturer) throws RepositoryException;
     
-    public List<Lecturer> query(LecturerSpecification specification) throws RepositoryException; 
+    public List<Lecturer> query(UserSpecification specification) throws RepositoryException; 
 }

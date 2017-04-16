@@ -1,4 +1,4 @@
-package teenwolves.com.github.lms.entity.userrepository;
+package teenwolves.com.github.lms.entity.user.userspecification;
 
 import teenwolves.com.github.lms.entity.user.User;
 
@@ -10,5 +10,5 @@ import teenwolves.com.github.lms.entity.user.User;
  * @version 1.0
  */
 public interface UserSpecification {
-    public boolean specified(User user);
+    default public boolean specified(User user){return true;}
 }
