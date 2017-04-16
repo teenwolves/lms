@@ -21,16 +21,15 @@ import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
 import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
-import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerById;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
 import teenwolves.com.github.lms.entity.student.Student;
 import teenwolves.com.github.lms.entity.student.studentrepository.AbstractStudentRepository;
-import teenwolves.com.github.lms.entity.student.studentrepository.lmsstudentrepository.StudentById;
 import teenwolves.com.github.lms.entity.student.studentrepository.lmsstudentrepository.StudentRepository;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
-import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserByUsernameAndPassword;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserByUsernameAndPassword;
 import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.login.utility.LoginUtility;
 import teenwolves.com.github.lms.util.Utility;
@@ -152,7 +151,7 @@ public class LoginServlet extends HttpServlet {
             try {
                 // Checking if the user is a student
                 List<Student> students = studentRepository.query(
-                        new StudentById(user.getId()));
+                        new UserById(user.getId()));
                 
                 student = students.get(0);
                 // Setting User attributes
@@ -174,15 +173,12 @@ public class LoginServlet extends HttpServlet {
                     try {
                         // Checking if the user is a lecturer
                         List<Lecturer> lecturers = lecturerRepository.query(
-                                new LecturerById(user.getId()));
+                                new UserById(user.getId()));
                         
                         lecturer = lecturers.get(0);
                         
                         // Setting User attributes
-                        lecturer.setName(user.getName());
-                        lecturer.setEmail(user.getEmail());
-                        lecturer.setUsername(user.getUsername());
-                        lecturer.setPassword(user.getPassword());
+                        lecturer.setAttributes(user);
                         
                         // Setting the user to the Session object
                         HttpSession session = request.getSession();
