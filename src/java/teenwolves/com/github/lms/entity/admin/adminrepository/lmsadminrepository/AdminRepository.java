@@ -21,7 +21,12 @@ import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.U
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedModuleManager;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedScheduleManager;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
-import teenwolves.com.github.lms.entity.admin.adminrepository.AdminSpecification;
+import teenwolves.com.github.lms.entity.admin.adminspecification.AdminSpecification;
+import teenwolves.com.github.lms.entity.user.User;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
+import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
+import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.repository.RepositoryUtility;
@@ -33,7 +38,7 @@ import teenwolves.com.github.lms.repository.RepositoryUtility;
 public class AdminRepository implements AbstractAdminRepository{
     // Database to access Admin data
     private MySQLDatabase database;
-
+    private AbstractUserRepository userRepository;
     /**
      * Class constructor which takes a <code>MySQLDatabase</code>
      * as an argument.
@@ -41,14 +46,20 @@ public class AdminRepository implements AbstractAdminRepository{
      */
     public AdminRepository(MySQLDatabase database) {
         this.database = database;
+        userRepository = new UserRepository(database);
     }
 
     @Override
     public void addAdmin(Admin admin) throws RepositoryException {
+        try{
+            userRepository.addUser(admin);
+        }catch(RepositoryException re){
+            throw re;
+        }
+        
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO admin(");
         query.append("id, ");
-        query.append("adminid, ");
         query.append("adminmanager, ");
         query.append("lecturermanager, ");
         query.append("schedulemanager, ");
@@ -72,6 +83,11 @@ public class AdminRepository implements AbstractAdminRepository{
 
     @Override
     public void updateAdmin(Admin admin) throws RepositoryException {
+        try{
+            userRepository.updateUser(admin);
+        }catch(RepositoryException re){
+            throw re;
+        }
         StringBuilder query = new StringBuilder();
         query.append("UPDATE admin SET ");
         query.append("adminmanager = ");
@@ -104,10 +120,55 @@ public class AdminRepository implements AbstractAdminRepository{
     }
 
     @Override
-    public List<Admin> query(AdminSpecification specification) throws RepositoryException {
+    public List<Admin> query(UserSpecification specification) throws RepositoryException {
         List<Admin> admins = null;
+        List<User> users = null;
         String  query = "SELECT * FROM admin";
         
+        if(specification.getClass() == AdminSpecification.class){
+             admins = specifyAdmins(query, specification);
+        }else{
+            try{
+                users = userRepository.query(specification);
+                admins = getUserAdminIntersection(users, 
+                        specifyAdmins(query, new AllUsers()));
+            }catch(RepositoryException re){
+                throw re;
+            }
+        }
+        
+        return admins;
+    }
+
+    // Helper Methods
+    private void setAdminBehaviours( Admin admin, int adminManager, int lecturerManager, int scheduleManager, int moduleManager) {
+        if(adminManager == 1){
+            admin.setAdminManager(new LmsAdminManager());
+        }else{
+            admin.setAdminManager(new UnauthorizedAdminManager());
+        }
+        
+        if(lecturerManager == 1){
+            admin.setLecturerManager(new LmsLecturerManager());
+        }else{
+            admin.setLecturerManager(new UnauthorizedLecturerManager());
+        }
+        
+        if(scheduleManager == 1){
+            admin.setScheduleManager(new LmsScheduleManager());
+        }else{
+            admin.setScheduleManager(new UnauthorizedScheduleManager());
+        }
+        
+        if(moduleManager == 1){
+            admin.setModuleManager(new LmsModuleManager());
+        }else{
+            admin.setModuleManager(new UnauthorizedModuleManager());
+        }
+    }
+    
+    private List<Admin> specifyAdmins(String query, UserSpecification specification) throws RepositoryException{
+        List<Admin> admins = null;
         try {
             // Connecting to the database
             database.connect();
@@ -141,37 +202,24 @@ public class AdminRepository implements AbstractAdminRepository{
         } catch (SQLException ex) {
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
         }
-        if(admins == null){
-            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
-        }
         return admins;
     }
-
-    // Helper Methods
-    private void setAdminBehaviours( Admin admin, int adminManager, int lecturerManager, int scheduleManager, int moduleManager) {
-        if(adminManager == 1){
-            admin.setAdminManager(new LmsAdminManager());
-        }else{
-            admin.setAdminManager(new UnauthorizedAdminManager());
-        }
-        
-        if(lecturerManager == 1){
-            admin.setLecturerManager(new LmsLecturerManager());
-        }else{
-            admin.setLecturerManager(new UnauthorizedLecturerManager());
-        }
-        
-        if(scheduleManager == 1){
-            admin.setScheduleManager(new LmsScheduleManager());
-        }else{
-            admin.setScheduleManager(new UnauthorizedScheduleManager());
-        }
-        
-        if(moduleManager == 1){
-            admin.setModuleManager(new LmsModuleManager());
-        }else{
-            admin.setModuleManager(new UnauthorizedModuleManager());
-        }
-    }
     
+    private List<Admin> getUserAdminIntersection(List<User> users, List<Admin> admins) throws RepositoryException{
+        List<Admin> outputAdmins = null;
+        if(admins == null){
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        }else{
+            outputAdmins = new ArrayList<>();
+            for(Admin admin: admins){
+                for(User user: users){
+                    if(user.equals(admin)){
+                        admin.setAttributes(user);
+                        outputAdmins.add(admin);
+                    }
+                }
+            }
+        }
+        return outputAdmins;
+    }
 }
