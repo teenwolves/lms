@@ -54,9 +54,7 @@ public class AdminRepository implements AbstractAdminRepository{
         query.append("schedulemanager, ");
         query.append("modulemanager) VALUES(");
         query.append(admin.getId());
-        query.append(", '");
-        query.append(admin.getAdminId());
-        query.append("', ");
+        query.append(", ");
         query.append(admin.getAdminManager().toString());
         query.append(", ");
         query.append(admin.getLecturerManager().toString());
@@ -76,9 +74,7 @@ public class AdminRepository implements AbstractAdminRepository{
     public void updateAdmin(Admin admin) throws RepositoryException {
         StringBuilder query = new StringBuilder();
         query.append("UPDATE admin SET ");
-        query.append("adminid = '");
-        query.append(admin.getAdminId());
-        query.append("', adminmanager = ");
+        query.append("adminmanager = ");
         query.append(admin.getAdminManager().toString());
         query.append(", lecturermanager = ");
         query.append(admin.getLecturerManager().toString());
@@ -124,7 +120,6 @@ public class AdminRepository implements AbstractAdminRepository{
             while(rows.next()){
                 admin = new Admin();
                 admin.setId(rows.getInt("id"));
-                admin.setAdminId(rows.getString("adminid"));
                 
                 int adminManager = rows.getInt("adminmanager");
                 int lecturerManager = rows.getInt("lecturermanager");

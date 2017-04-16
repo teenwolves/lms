@@ -10,23 +10,13 @@ import teenwolves.com.github.lms.entity.user.User;
  * @version 1.0
  */
 public class Student extends User implements Serializable{
-    private String studentId;
 
     public Student() {
         super();
-        studentId = "";
     }
 
     public Student(String studentId) {
-        this.studentId = studentId;
-    }
-
-    public String getStudentId() {
-        return studentId;
-    }
-
-    public void setStudentId(String studentId) {
-        this.studentId = studentId;
+        
     }
     
 }

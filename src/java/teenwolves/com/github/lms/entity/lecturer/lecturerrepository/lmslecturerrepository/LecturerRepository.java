@@ -39,11 +39,9 @@ public class LecturerRepository implements AbstractLecturerRepository{
     public void addLecturer(Lecturer lecturer) throws RepositoryException{
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO lecturer(");
-        query.append("id, lecturerid) VALUES(");
+        query.append("id) VALUES(");
         query.append(lecturer.getId());
-        query.append(",'");
-        query.append(lecturer.getLecturerId());
-        query.append("')");
+        query.append(")");
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Lecturer is not added");
@@ -61,8 +59,6 @@ public class LecturerRepository implements AbstractLecturerRepository{
         StringBuilder query = new StringBuilder();
         query.append("DELETE FROM lecturer WHERE id=");
         query.append(lecturer.getId());
-        query.append(" AND lecturerid=");
-        query.append(lecturer.getLecturerId());
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Lecturer is not deleted");
@@ -88,7 +84,6 @@ public class LecturerRepository implements AbstractLecturerRepository{
             while (rows.next()) {                
                 lecturer = new Lecturer();
                 lecturer.setId(rows.getInt("id"));
-                lecturer.setLecturerId(rows.getString("lecturerid"));
                 
                 if(specification.specified(lecturer)){
                     if(lecturers == null){

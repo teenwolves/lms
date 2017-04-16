@@ -21,7 +21,6 @@ import teenwolves.com.github.lms.entity.user.User;
  */
 public class Admin extends User implements Serializable{
     // Admin id
-    private String adminId;
     private AdminManager adminManager;
     private ScheduleManager scheduleManager;
     private LecturerManager lecturerManager;
@@ -64,23 +63,6 @@ public class Admin extends User implements Serializable{
      */
     public Admin() {
         super();
-        adminId = "";
-    }
-
-    /**
-     * This method gets the admin id of an <code>Admin</code>
-     * @return the admin id.
-     */
-    public String getAdminId() {
-        return adminId;
-    }
-
-    /**
-     * This method sets the admin id of an <code>Admin</code>
-     * @param adminId to set
-     */
-    public void setAdminId(String adminId) {
-        this.adminId = adminId;
     }
     
 }

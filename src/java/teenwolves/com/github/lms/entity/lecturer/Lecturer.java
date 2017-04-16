@@ -18,19 +18,10 @@ import teenwolves.com.github.lms.entity.user.User;
  */
 public class Lecturer extends User implements Serializable{
     
-    private String lecturerId;
     private List<Module> modules;
 
     public Lecturer() {
         super();
-        lecturerId = "";
-    }
-    public String getLecturerId() {
-        return lecturerId;
-    }
-
-    public void setLecturerId(String lecturerId) {
-        this.lecturerId = lecturerId;
     }
     
 }

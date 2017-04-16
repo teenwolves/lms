@@ -67,7 +67,6 @@ public class StudentRepository implements AbstractStudentRepository{
             while (rows.next()) {                
                 student = new Student();
                 student.setId(rows.getInt("id"));
-                student.setStudentId(rows.getString("studentid"));
                 
                 if(specification.specified(student)){
                     if(students == null){
