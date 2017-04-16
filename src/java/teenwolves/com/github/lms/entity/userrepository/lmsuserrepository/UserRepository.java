@@ -17,7 +17,7 @@ import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.repository.RepositoryError;
-import teenwolves.com.github.lms.entity.userrepository.UserSpecification;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryUtility;
 
 /**
