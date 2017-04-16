@@ -15,7 +15,10 @@ import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
-import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.LecturerSpecification;
+import teenwolves.com.github.lms.entity.lecturer.lecturerspecification.LecturerSpecification;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
+import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
+import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.repository.RepositoryUtility;
@@ -30,13 +33,22 @@ import teenwolves.com.github.lms.repository.RepositoryUtility;
 public class LecturerRepository implements AbstractLecturerRepository{
     // Database to query
     private MySQLDatabase database;
+    private AbstractUserRepository userRepository;
 
     public LecturerRepository(MySQLDatabase database) {
         this.database = database;
+        this.userRepository = new UserRepository(database);
     }
     
     @Override
     public void addLecturer(Lecturer lecturer) throws RepositoryException{
+        // Catching any exception thrown when adding to the user table
+        try{
+            userRepository.addUser(lecturer);
+        }catch(RepositoryException re){
+            throw re;
+        }
+        // Adding to the lecturer table
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO lecturer(");
         query.append("id) VALUES(");
@@ -51,7 +63,7 @@ public class LecturerRepository implements AbstractLecturerRepository{
 
     @Override
     public void updateLecturer(Lecturer lecturer) throws RepositoryException{
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        userRepository.updateUser(lecturer);
     }
 
     @Override
@@ -67,7 +79,7 @@ public class LecturerRepository implements AbstractLecturerRepository{
     }
 
     @Override
-    public List<Lecturer> query(LecturerSpecification specification) throws RepositoryException {
+    public List<Lecturer> query(UserSpecification specification) throws RepositoryException {
         List<Lecturer> lecturers = null;
         String query = "SELECT * FROM lecturer";
         

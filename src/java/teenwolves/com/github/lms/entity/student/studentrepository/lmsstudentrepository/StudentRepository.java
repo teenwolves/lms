@@ -15,7 +15,8 @@ import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.student.Student;
 import teenwolves.com.github.lms.entity.student.studentrepository.AbstractStudentRepository;
-import teenwolves.com.github.lms.entity.student.studentrepository.StudentSpecification;
+import teenwolves.com.github.lms.entity.student.studentspecification.StudentSpecification;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
 
@@ -50,7 +51,7 @@ public class StudentRepository implements AbstractStudentRepository{
     }
 
     @Override
-    public List<Student> query(StudentSpecification specification) throws RepositoryException {
+    public List<Student> query(UserSpecification specification) throws RepositoryException {
         List<Student> students = null;
         String query = "SELECT * FROM student";
         
