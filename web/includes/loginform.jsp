@@ -8,7 +8,7 @@
 <div class="form-group">
 <label class="col-sm-2 control-label" for="username">User</label>
 <div class="col-sm-10">
-        <input class="form-control" id="password" type="text" name="username" placeholder="username">
+        <input class="form-control" id="username" type="text" name="username" placeholder="username">
 </div>
 </div>
 <div class="form-group">
