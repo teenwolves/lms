@@ -10,8 +10,10 @@
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>lms</title>
+        <%@include file="includes/csslinks.jsp" %>
     </head>
     <body>
-        <h1>${user.name}</h1>
+        <%@include file="includes/adminnav.jsp" %>
+        <%@include file="includes/jsscripts.jsp" %>
     </body>
 </html>
