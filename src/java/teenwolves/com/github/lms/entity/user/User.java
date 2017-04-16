@@ -74,5 +74,20 @@ public class User implements Serializable{
         this.password = user.getPassword();
         this.email = user.getEmail();
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if(o == null){
+            return false;
+        }else if(this == o){
+            return true;
+        }else if(!(o instanceof User)){
+            return false;
+        }else{
+            User user = (User) o;
+            return user.getId() == this.id;
+        }
+        
+    }   
     
 }
