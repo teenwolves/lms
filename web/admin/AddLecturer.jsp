@@ -16,10 +16,11 @@
         <%@include file="../includes/adminnav.jsp" %>
         <div class="container">
             <div class="row"><h1 class="col-xs-12">Add Lecturer</h1></div>
+            <div class="row"><span class="hidden col-xs-2">lms</span><span class="col-xs-10">${message}</span></div>
             <div class="row">
 			<section class="col-xs-12">
 
-	<form class="form-horizontal">
+	<form action="addlecturer" method="post" class="form-horizontal">
 		<div class="form-group">
 			<label class="col-sm-2 control-label" for="name">Name</label>
 			<div class="col-sm-10">
