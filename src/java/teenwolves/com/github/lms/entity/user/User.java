@@ -6,6 +6,8 @@
 package teenwolves.com.github.lms.entity.user;
 
 import java.io.Serializable;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
+import teenwolves.com.github.lms.entity.exceptions.errors.UserError;
 
 /**
  * <code>User</code> is a POJO class in the lms application.
@@ -31,7 +33,12 @@ public class User implements Serializable{
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(int id) throws UserException{
+        if(id < 1){
+            UserError error = UserError.INVALID_VALUE;
+            error.setMessage("Invalid id");
+            throw new UserException(error);
+        }
         this.id = id;
     }
 
@@ -39,7 +46,12 @@ public class User implements Serializable{
         return name;
     }
 
-    public void setName(String name) {
+    public void setName(String name) throws UserException{
+        if(name.length() > 50){
+            UserError error = UserError.INVALID_SIZE;
+            error.setMessage("Name can not have more than 50 characters.");
+            throw new UserException(error);
+        }
         this.name = name;
     }
 
@@ -47,7 +59,13 @@ public class User implements Serializable{
         return username;
     }
 
-    public void setUsername(String username) {
+    public void setUsername(String username) throws UserException{
+        if(username.length() > 15){
+            UserError error = UserError.INVALID_SIZE;
+            error.setMessage("Userame can not have more than 15 characters.");
+            throw new UserException(error);
+        }
+        
         this.username = username;
     }
 
@@ -55,7 +73,12 @@ public class User implements Serializable{
         return password;
     }
 
-    public void setPassword(String password) {
+    public void setPassword(String password) throws UserException {
+        if(password.length() > 15){
+            UserError error = UserError.INVALID_SIZE;
+            error.setMessage("Password can not have more than 15 characters.");
+            throw new UserException(error);
+        }
         this.password = password;
     }
 
@@ -63,11 +86,16 @@ public class User implements Serializable{
         return email;
     }
 
-    public void setEmail(String email) {
+    public void setEmail(String email) throws UserException{
+        if(email.length() > 255){
+            UserError error = UserError.INVALID_SIZE;
+            error.setMessage("Email address can not have more than 255 characters.");
+            throw new UserException(error);
+        }
         this.email = email;
     }
     
-    public void setAttributes(User user){
+    public void setAttributes(User user) throws UserException{
         this.id = user.getId();
         this.name = user.getName();
         this.username = user.getUsername();
