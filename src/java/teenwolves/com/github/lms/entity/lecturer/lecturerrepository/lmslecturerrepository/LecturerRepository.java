@@ -44,9 +44,18 @@ public class LecturerRepository implements AbstractLecturerRepository{
     
     @Override
     public void addLecturer(Lecturer lecturer) throws RepositoryException{
+        //User object to get the added user
+        List<User> users = null;
+        User user = null;
         // Catching any exception thrown when adding to the user table
         try{
+            System.out.println("Trying to add");
             userRepository.addUser(lecturer);
+            System.out.println("User added");
+            users = userRepository.query(new AllUsers());
+            user = getUserForLecturer(lecturer, users);
+            
+            lecturer.setAttributes(user);
         }catch(RepositoryException re){
             throw re;
         }
@@ -151,4 +160,17 @@ public class LecturerRepository implements AbstractLecturerRepository{
         return outputLecturers;
     }
     
+    private User getUserForLecturer(Lecturer lecturer,List<User> users) throws RepositoryException{
+        User outputUser = null;
+        for (User user : users) {
+            if(user.equals(lecturer)){
+                outputUser = user;
+                break;
+            }
+        }
+        if(outputUser == null){
+            throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
+        }
+        return outputUser;
+    }
 }
