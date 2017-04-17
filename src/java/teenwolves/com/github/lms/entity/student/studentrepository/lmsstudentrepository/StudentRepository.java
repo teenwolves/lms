@@ -13,9 +13,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.student.Student;
 import teenwolves.com.github.lms.entity.student.studentrepository.AbstractStudentRepository;
-import teenwolves.com.github.lms.entity.student.studentspecification.StudentSpecification;
 import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
@@ -94,6 +94,10 @@ public class StudentRepository implements AbstractStudentRepository{
             throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
         } catch (SQLException ex) {
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        } catch (UserException ex) {
+            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+            error.setErrorMessage(ex.getError().getMessage());
+            throw new RepositoryException(error);
         }
         
         if(students == null){
