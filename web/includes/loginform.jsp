@@ -21,7 +21,7 @@
 <div class="checkbox">
     <div class="col-sm-10 col-sm-offset-2">
     <label>
-	<input type="checkbox" name="rememberme">Remember me
+        <input type="checkbox" name="rememberme">Remember me
     </label>
     </div>
 </div>
