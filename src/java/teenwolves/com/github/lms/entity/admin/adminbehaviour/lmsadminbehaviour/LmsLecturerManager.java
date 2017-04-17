@@ -39,7 +39,7 @@ public class LmsLecturerManager implements LecturerManager{
             lecturerRepository.addLecturer(lecturer);
         } catch (RepositoryException ex) {
             AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
-            error.setMessage("Lecturer is not registered.");
+            error.setMessage("Lecturer is not added.");
             throw new AdminBehaviourException(error);
         }
     }
