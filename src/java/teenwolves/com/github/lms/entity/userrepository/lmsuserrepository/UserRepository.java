@@ -16,6 +16,7 @@ import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.repository.RepositoryUtility;
@@ -53,12 +54,18 @@ public class UserRepository implements AbstractUserRepository{
             User user;
             while(rows.next()){
                 user = new User();
-                user.setId(rows.getInt("id"));
-                user.setName(rows.getString("name"));
-                user.setUsername(rows.getString("username"));
-                user.setPassword(rows.getString("password"));
-                user.setEmail(rows.getString("email"));
-                
+                try {
+                    user.setId(rows.getInt("id"));
+                    user.setName(rows.getString("name"));
+                    user.setUsername(rows.getString("username"));
+                    user.setPassword(rows.getString("password"));
+                    user.setEmail(rows.getString("email"));
+                } catch (UserException ex) {
+                    RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+                    error.setErrorMessage(ex.getError().getMessage());
+                    throw new RepositoryException(error);
+                }
+
                 // Adding users to the user list which meets the specification
                 if(specification.specified(user)){
                     if(users == null){
