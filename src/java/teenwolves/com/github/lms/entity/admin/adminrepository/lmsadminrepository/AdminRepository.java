@@ -22,6 +22,7 @@ import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.U
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedScheduleManager;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
 import teenwolves.com.github.lms.entity.admin.adminspecification.AdminSpecification;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
@@ -201,6 +202,10 @@ public class AdminRepository implements AbstractAdminRepository{
             throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
         } catch (SQLException ex) {
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        } catch (UserException ex) {
+            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+            error.setErrorMessage(ex.getError().getMessage());
+            throw new RepositoryException(error);
         }
         return admins;
     }
@@ -214,7 +219,13 @@ public class AdminRepository implements AbstractAdminRepository{
             for(Admin admin: admins){
                 for(User user: users){
                     if(user.equals(admin)){
-                        admin.setAttributes(user);
+                        try {
+                            admin.setAttributes(user);
+                        } catch (UserException ex) {
+                            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+                            error.setErrorMessage(ex.getError().getMessage());
+                            throw new RepositoryException(error);
+                        }
                         outputAdmins.add(admin);
                     }
                 }
