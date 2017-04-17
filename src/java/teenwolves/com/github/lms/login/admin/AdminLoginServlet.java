@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -104,9 +105,7 @@ public class AdminLoginServlet extends HttpServlet {
             throws ServletException, IOException {
         String username = request.getParameter("username");
         String password = request.getParameter("password");
-        
         Admin admin = null;
-        
         
         if(Utility.hasPresence(username) && Utility.hasPresence(password)){
             try {
@@ -119,8 +118,19 @@ public class AdminLoginServlet extends HttpServlet {
                 
                 admin = admins.get(0);
                 
-                HttpSession session = request.getSession();
-                session.setAttribute("user", admin);
+                // if remember me is checked
+                boolean isRememberMeChecked = LoginUtility.isChecked(
+                        request.getParameter("rememberme"), "on");
+                
+                // if remember me is checked
+                if(isRememberMeChecked){
+                    Cookie user = new Cookie("admin", admin.getUsername());
+                    response.addCookie(user);
+                }else{
+                    HttpSession session = request.getSession();
+                    session.setAttribute("user", admin);
+                }
+                
                 
             } catch (RepositoryException ex) {
                 System.out.println(ex.getError().getErrorMessage());
