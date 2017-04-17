@@ -41,4 +41,12 @@ public class LoginUtility {
         servletContext.getRequestDispatcher(url).forward(request, response);
         
     }
+    
+    public static boolean isChecked(String requestParam, String value){
+        if(requestParam == null){
+            return false;
+        }else{
+            return requestParam.equals(value);
+        }
+    }
 }
