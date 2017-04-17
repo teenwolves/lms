@@ -17,5 +17,9 @@ public class UserException extends Exception{
     public UserException(UserError error) {
         this.error = error;
     }
+
+    public UserError getError() {
+        return error;
+    }
     
 }
