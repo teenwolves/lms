@@ -7,18 +7,46 @@ package teenwolves.com.github.lms.entity.lecturer.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
+import teenwolves.com.github.lms.database.MySQLDatabase;
+import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
+import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
+import teenwolves.com.github.lms.entity.lecturer.Lecturer;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserByUsername;
+import teenwolves.com.github.lms.login.utility.LoginUtility;
+import teenwolves.com.github.lms.repository.RepositoryError;
+import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.util.Utility;
 
 /**
  *
  * @author Sudarshana Panditha
  */
-@WebServlet(name = "AddLecturerServlet", urlPatterns = {"/admin/addLecturer"})
+@WebServlet(name = "AddLecturerServlet", urlPatterns = {"/admin/addlecturer"})
 public class AddLecturerServlet extends HttpServlet {
+    // Lecturer repository to access lecturer data
+    private AbstractLecturerRepository lecturerRepository;
+    // Database to access data from
+    private MySQLDatabase database;
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        database = new LmsMySQLDatabase();
+        lecturerRepository = new LecturerRepository(database);
+    }
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -72,10 +100,53 @@ public class AddLecturerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String name;
-        String username;
-        String password;
-        String email;
+        String message = null;
+        
+        // Getting the request parameter values
+        String name = request.getParameter("name");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        
+        if(Utility.hasPresence(name) && Utility.hasPresence(email)){
+            name = Utility.inputFormat(name);
+            email = Utility.inputFormat(email);
+            
+            // Setting default values for username
+            if(!Utility.hasPresence(username)){
+                username = name.replaceAll(" ", "");
+            }else{
+                username = Utility.inputFormat(username);
+            }
+            
+            // Setting default values for password
+            if(!Utility.hasPresence(password)){
+                password = name.replaceAll(" ", "");
+            }else{
+                password = Utility.inputFormat(password);
+            }
+            
+            Lecturer lecturer = new Lecturer();
+            lecturer.setName(name);
+            lecturer.setEmail(email);
+            lecturer.setUsername(username);
+            lecturer.setPassword(password);
+            
+            try {
+                lecturerRepository.addLecturer(lecturer);
+                // Setting a message saying that the lecturer is added
+                message = "Lecturer is added successfully.";
+                
+            } catch (RepositoryException ex) {
+                message = ex.getError().getErrorMessage();
+            }
+            
+        }else{
+            // invalid data
+            message = "Please check you input data.";
+        }
+        request.setAttribute("message", message);
+        getServletContext().getRequestDispatcher("/admin/AddLecturer.jsp").forward(request, response);
     }
 
     /**
