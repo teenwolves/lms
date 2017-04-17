@@ -11,22 +11,15 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
-import teenwolves.com.github.lms.entity.admin.Admin;
-import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
-import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
-import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserByUsername;
-import teenwolves.com.github.lms.login.utility.LoginUtility;
-import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.util.Utility;
 
@@ -125,18 +118,18 @@ public class AddLecturerServlet extends HttpServlet {
             }else{
                 password = Utility.inputFormat(password);
             }
-            
-            Lecturer lecturer = new Lecturer();
-            lecturer.setName(name);
-            lecturer.setEmail(email);
-            lecturer.setUsername(username);
-            lecturer.setPassword(password);
-            
             try {
+                Lecturer lecturer = new Lecturer();
+                lecturer.setName(name);
+                lecturer.setEmail(email);
+                lecturer.setUsername(username);
+                lecturer.setPassword(password);
+
                 lecturerRepository.addLecturer(lecturer);
                 // Setting a message saying that the lecturer is added
                 message = "Lecturer is added successfully.";
-                
+            } catch (UserException ex) {
+                message = ex.getError().getMessage();
             } catch (RepositoryException ex) {
                 message = ex.getError().getErrorMessage();
             }
