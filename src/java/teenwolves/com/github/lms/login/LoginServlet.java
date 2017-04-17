@@ -18,6 +18,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
@@ -191,6 +192,11 @@ public class LoginServlet extends HttpServlet {
                         String url = "/login.jsp";
                         LoginUtility.forwardError(getServletContext(), request, 
                             response, url, ex.getError());
+                    } catch (UserException ex1) {
+                        String url = "/login.jsp";
+                        RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+                        LoginUtility.forwardError(getServletContext(), request, 
+                            response, url, error);
                     }
                     
                 }else{
@@ -199,6 +205,11 @@ public class LoginServlet extends HttpServlet {
                             response, url, ex.getError());
                 }
                 
+            } catch (UserException ex) {
+                String url = "/login.jsp";
+                RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+                LoginUtility.forwardError(getServletContext(), request, 
+                            response, url, error);
             }
           
         }else{
