@@ -16,7 +16,11 @@
         <%@include file="../includes/adminnav.jsp" %>
         <div class="container">
             <div class="row"><h1 class="col-xs-12">Add Lecturer</h1></div>
-            <div class="row"><span class="hidden col-xs-2">lms</span><span class="col-xs-10">${message}</span></div>
+        </div>
+        <div class="container">
+            <div class="row"><span class="hidden col-xs-2">lms</span><span class="col-xs-10 text-warning">${message}</span></div>
+        </div>
+        <div class="container">
             <div class="row">
 			<section class="col-xs-12">
 
