@@ -74,7 +74,7 @@ public class User implements Serializable{
         this.password = user.getPassword();
         this.email = user.getEmail();
     }
-
+    
     @Override
     public boolean equals(Object o) {
         if(o == null){
@@ -85,7 +85,8 @@ public class User implements Serializable{
             return false;
         }else{
             User user = (User) o;
-            return user.getId() == this.id;
+            return user.getId() == this.id
+                    || user.getUsername().equals(this.getUsername());
         }
         
     }   
