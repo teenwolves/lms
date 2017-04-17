@@ -9,10 +9,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.MySQLDatabaseException;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
 import teenwolves.com.github.lms.entity.lecturer.lecturerspecification.LecturerSpecification;
@@ -49,15 +48,17 @@ public class LecturerRepository implements AbstractLecturerRepository{
         User user = null;
         // Catching any exception thrown when adding to the user table
         try{
-            System.out.println("Trying to add");
             userRepository.addUser(lecturer);
-            System.out.println("User added");
             users = userRepository.query(new AllUsers());
             user = getUserForLecturer(lecturer, users);
             
             lecturer.setAttributes(user);
         }catch(RepositoryException re){
             throw re;
+        } catch (UserException ex) {
+            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+            error.setErrorMessage(ex.getError().getMessage());
+            throw new RepositoryException(error);
         }
         // Adding to the lecturer table
         StringBuilder query = new StringBuilder();
@@ -138,6 +139,10 @@ public class LecturerRepository implements AbstractLecturerRepository{
             throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
         } catch (SQLException ex) {
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        } catch (UserException ex) {
+            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+            error.setErrorMessage(ex.getError().getMessage());
+            throw new RepositoryException(error);
         }
         return lecturers;
     }
@@ -151,8 +156,14 @@ public class LecturerRepository implements AbstractLecturerRepository{
             for(Lecturer lecturer: lecturers){
                 for(User user: users){
                     if(user.equals(lecturer)){
-                        lecturer.setAttributes(user);
-                        outputLecturers.add(lecturer);
+                        try {
+                            lecturer.setAttributes(user);
+                            outputLecturers.add(lecturer);
+                        } catch (UserException ex) {
+                            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+                            error.setErrorMessage(ex.getError().getMessage());
+                            throw new RepositoryException(error);
+                        }
                     }
                 }
             }
