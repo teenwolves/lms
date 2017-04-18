@@ -23,13 +23,13 @@
         <div class="container">
             <div class="row">
                 <section class="col-xs-12">
-                    <form action="#" method="post" class="form-horizontal">
+                    <form action="addadmin" method="post" class="form-horizontal">
                         <%@include file="../includes/adduserform.jsp" %>
                         <div class="form-group">
                             <div class="checkbox">
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <label>
-                                        <input type="checkbox" name="adminmanager">Admin Manager
+                                        <input type="checkbox" name="adminmanager" value="true">Admin Manager
                                     </label>
                                 </div>
                             </div>
@@ -38,7 +38,7 @@
                             <div class="checkbox">
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <label>
-                                        <input type="checkbox" name="lecturermanager">Lecturer Manager
+                                        <input type="checkbox" name="lecturermanager" value="true">Lecturer Manager
                                     </label>
                                 </div>
                             </div>
@@ -47,7 +47,7 @@
                             <div class="checkbox">
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <label>
-                                        <input type="checkbox" name="modulemanager">Module Manager
+                                        <input type="checkbox" name="modulemanager" value="true">Module Manager
                                     </label>
                                 </div>
                             </div>
@@ -56,7 +56,7 @@
                             <div class="checkbox">
                                 <div class="col-sm-10 col-sm-offset-2">
                                     <label>
-                                        <input type="checkbox" name="schedulemanager">Schedule Manager
+                                        <input type="checkbox" name="schedulemanager" value="true">Schedule Manager
                                     </label>
                                 </div>
                             </div>
