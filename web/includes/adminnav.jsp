@@ -27,9 +27,9 @@
       <li>
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Lecturers <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="AddLecturer.jsp">Add Lecturer</a></li>
-          <li><a href="#">Update Lecturer</a></li>
-          <li><a href="#">Delete Lecturer</a></li>
+          <li><a href="addlecturer.jsp">Add Lecturer</a></li>
+          <li><a href="lecturers?action=delete">Delete Lecturer</a></li>
+          <li><a href="lecturers?action=view">Lecturers</a></li>
         </ul>
       </li>
       <li>
