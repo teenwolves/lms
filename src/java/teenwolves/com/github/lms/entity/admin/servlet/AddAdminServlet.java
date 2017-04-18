@@ -7,6 +7,8 @@ package teenwolves.com.github.lms.entity.admin.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -14,8 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.admin.Admin;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
 import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
+import teenwolves.com.github.lms.entity.admin.utilities.AdminUtilities;
+import teenwolves.com.github.lms.entity.exceptions.UserException;
+import teenwolves.com.github.lms.entity.user.utilities.UserUtilities;
+import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.util.Utility;
 
 /**
  *
@@ -90,7 +98,72 @@ public class AddAdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Message to display
+        String message = "";
+        String url = "/admin/addadmin.jsp";
         
+        // Admin to add
+        Admin admin = null;
+
+        // Getting the request parameter values
+        String name = request.getParameter("name");
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String email = request.getParameter("email");
+        
+        boolean isAdminManager = Boolean.parseBoolean(
+                request.getParameter("adminmanager"));
+        boolean isLecturerManager = Boolean.parseBoolean(
+                request.getParameter("lecturermanager"));
+        boolean isModuleManager = Boolean.parseBoolean(
+                request.getParameter("modulemanager"));
+        boolean isScheduleManager = Boolean.parseBoolean(
+                request.getParameter("schedulemanager"));
+        
+        if(Utility.hasPresence(name) && Utility.hasPresence(email)){
+            // General formatting
+            name = Utility.inputFormat(name);
+            email = Utility.inputFormat(email);
+            
+            // Generating a Username
+            if(!Utility.hasPresence(username)){
+                username = UserUtilities.generateUsername(name);
+            }
+            // Generating a password
+            if(!Utility.hasPresence(password)){
+                password = UserUtilities.generatePassword(name);
+            }
+            
+            // Setting Admin instance variables
+            try {
+                admin = new Admin();
+                admin.setName(name);
+                admin.setEmail(email);
+                admin.setUsername(username);
+                admin.setPassword(password);
+                admin.setAdminManager(
+                        AdminUtilities.getAdminManager(isAdminManager));
+                admin.setLecturerManager(
+                        AdminUtilities.getLecturerManager(isLecturerManager));
+                admin.setModuleManager(
+                        AdminUtilities.getModuleManager(isModuleManager));
+                admin.setScheduleManager(
+                        AdminUtilities.getScheduleManager(isScheduleManager));
+                
+                // Adding the Admin to the database
+                adminRepository.addAdmin(admin);
+                
+                message = "Admin is successfully added";
+                
+            } catch (UserException ex) {
+                message = ex.getError().getMessage();
+            } catch (RepositoryException ex) {
+                message = ex.getError().getErrorMessage();
+            }
+            
+        }
+        request.setAttribute("message", message);
+        getServletContext().getRequestDispatcher("/admin/addadmin.jsp").forward(request, response);
     }
 
     /**
