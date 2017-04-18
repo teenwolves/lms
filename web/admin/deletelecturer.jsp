@@ -21,6 +21,11 @@
         </div>
         <div class="container">
             <div class="row">
+                <p class="col-xs-12">${message}</p>
+            </div>
+        </div>
+        <div class="container">
+            <div class="row">
                 <section class="col-xs-12">
                     <%@include file="../includes/deletelecturers.jsp" %>
                 </section>
