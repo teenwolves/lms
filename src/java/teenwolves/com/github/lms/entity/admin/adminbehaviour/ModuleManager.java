@@ -9,6 +9,6 @@ package teenwolves.com.github.lms.entity.admin.adminbehaviour;
  *
  * @author Sudarshana Panditha
  */
-public interface ModuleManager {
+public interface ModuleManager extends AdminBehaviour{
     
 }
