@@ -88,6 +88,8 @@ public class LecturerRepository implements AbstractLecturerRepository{
         error.setErrorMessage("Lecturer is not deleted");
         
         RepositoryUtility.executeQuery(database, query.toString(), error);
+        
+        userRepository.deleteUser(lecturer);
     }
 
     @Override
