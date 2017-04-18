@@ -109,7 +109,7 @@ public class DeleteLecturerServlet extends HttpServlet {
         Lecturer lecturer = null;
         int id;
         // Checking if any lecturer is selected
-        if(deletingLecturers != null && deletingLecturers.length > 0){
+        if(deletingLecturers != null){
             for (String deletingLecturer : deletingLecturers) {
                 id = Integer.parseInt(deletingLecturer);
                 try {
@@ -131,18 +131,19 @@ public class DeleteLecturerServlet extends HttpServlet {
             url = "/admin/lecturers?action=delete";
         }
         
-        if(error != null){
-            message = "Error occurred.";
-            url = "/admin/lecturers?action=delete";
-            if(deleted > 0){
-                if(deleted == 1){
-                    message += " Only 1 lecturer is deleted."; 
-                }else{
-                    message += " Only " + deleted + " lecturers are deleted.";
-                }
+        // Setting the deleted lecturers message
+        String deletionMessage = "";
+        if (deleted > 0) {
+            if (deleted == 1) {
+                message += "1 lecturer is deleted.";
+            } else {
+                message += deleted + " lecturers are deleted.";
             }
-        }else{
-            message = deleted + " lecturers are deleted successfully";
+        }
+        
+        if(error != null){
+            message = "Error occurred. " + deletionMessage;
+            url = "/admin/lecturers?action=delete";
         }
         
         // Setting the message
