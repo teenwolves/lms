@@ -21,5 +21,10 @@ public class UnauthorizedLecturerManager implements LecturerManager{
     public void addLecturer(Lecturer lecturer) throws AdminBehaviourException {
         throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
     }
+
+    @Override
+    public int toInt() {
+        return 0;
+    }
     
 }

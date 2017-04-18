@@ -43,5 +43,10 @@ public class LmsLecturerManager implements LecturerManager{
             throw new AdminBehaviourException(error);
         }
     }
+
+    @Override
+    public int toInt() {
+        return 1;
+    }
     
 }

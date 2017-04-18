@@ -12,5 +12,10 @@ import teenwolves.com.github.lms.entity.admin.adminbehaviour.ModuleManager;
  * @author Sudarshana Panditha
  */
 public class UnauthorizedModuleManager implements ModuleManager{
+
+    @Override
+    public int toInt() {
+        return 0;
+    }
     
 }

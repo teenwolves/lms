@@ -50,10 +50,8 @@ public class LmsAdminManager implements AdminManager{
     }
 
     @Override
-    public String toString() {
-        return Integer.toString(1);
+    public int toInt() {
+        return 1;
     }
-
-    
     
 }
