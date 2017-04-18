@@ -139,7 +139,7 @@ public class AddLecturerServlet extends HttpServlet {
             message = "Please check you input data.";
         }
         request.setAttribute("message", message);
-        getServletContext().getRequestDispatcher("/admin/AddLecturer.jsp").forward(request, response);
+        getServletContext().getRequestDispatcher("/admin/addlecturer.jsp").forward(request, response);
     }
 
     /**
