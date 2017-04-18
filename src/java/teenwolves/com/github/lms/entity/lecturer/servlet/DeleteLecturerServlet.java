@@ -7,11 +7,21 @@ package teenwolves.com.github.lms.entity.lecturer.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import teenwolves.com.github.lms.database.MySQLDatabase;
+import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.lecturer.Lecturer;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
+import teenwolves.com.github.lms.repository.RepositoryError;
+import teenwolves.com.github.lms.repository.RepositoryException;
 
 /**
  *
@@ -19,6 +29,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "DeleteLecturerServlet", urlPatterns = {"/admin/deletelecturer"})
 public class DeleteLecturerServlet extends HttpServlet {
+    // Databse to access
+    private MySQLDatabase database;
+    // LecturerRepository to access lecturer data
+    private AbstractLecturerRepository lecturerRepository;
+    
+    // Overriding the init method to setup databse and repositories
+
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        database = new LmsMySQLDatabase();
+        lecturerRepository = new LecturerRepository(database);
+    }
+    
 
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
@@ -72,6 +96,60 @@ public class DeleteLecturerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Message to send if an error occurs
+        String message = "";
+        String url = "/admin/lecturers";
+        RepositoryError error = null;
+        
+        // Deleted count of lecturers
+        int deleted = 0;
+        
+        // Retrieving the selected lecturers
+        String deletingLecturers [] = request.getParameterValues("deletinglecturers");
+        Lecturer lecturer = null;
+        int id;
+        // Checking if any lecturer is selected
+        if(deletingLecturers != null && deletingLecturers.length > 0){
+            for (String deletingLecturer : deletingLecturers) {
+                id = Integer.parseInt(deletingLecturer);
+                try {
+                    // Get the matching lecturer for the id
+                    lecturer = lecturerRepository.query(new UserById(id)).get(0);
+                    
+                    // Delete the lecturer
+                    lecturerRepository.deleteLecturer(lecturer);
+                    
+                    // Incrementing the count
+                    deleted++;
+                } catch (RepositoryException ex) {
+                    error = ex.getError();
+                }
+            }
+        }else{
+            // No lecturer is selected
+            message = "Please select the lecturers to delete.";
+            url = "/admin/lecturers?action=delete";
+        }
+        
+        if(error != null){
+            message = "Error occurred.";
+            url = "/admin/lecturers?action=delete";
+            if(deleted > 0){
+                if(deleted == 1){
+                    message += " Only 1 lecturer is deleted."; 
+                }else{
+                    message += " Only " + deleted + " lecturers are deleted.";
+                }
+            }
+        }else{
+            message = deleted + " lecturers are deleted successfully";
+        }
+        
+        // Setting the message
+        request.setAttribute("message", message);
+        
+        // Dispatching the request
+        getServletContext().getRequestDispatcher(url).forward(request, response);
         
     }
 
