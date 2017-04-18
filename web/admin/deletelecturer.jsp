@@ -14,6 +14,7 @@
         <%@include file="../includes/admincsslinks.jsp" %>
     </head>
     <body>
+        <%@include file="../includes/adminnav.jsp" %>
         <div class="container">
             <div class="row">
                 <h1 class="col-xs-12">Delete Lecturers</h1>
