@@ -6,7 +6,7 @@
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
 <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<form class="form-horizontal" action="#" method="post">
+<form class="form-horizontal" action="deletelecturer" method="post">
     <table class="table table-hover">
         <tr>
             <th>id</th>
@@ -33,4 +33,9 @@
         </tr>
     </c:forEach>
     </table>
+    <div class="form-group">
+        <div class="col-sm-10 col-sm-offset-10">
+            <input class="btn btn-default" type="submit" value="Delete">
+        </div>
+    </div>
 </form>
