@@ -52,10 +52,21 @@ public class AdminRepository implements AbstractAdminRepository{
 
     @Override
     public void addAdmin(Admin admin) throws RepositoryException {
+        List<User> users = null;
+        User user = null;
+        // Catching any exception thrown when adding to the user table
         try{
             userRepository.addUser(admin);
+            users = userRepository.query(new AllUsers());
+            user = getUserForAdmin(admin, users);
+            
+            admin.setAttributes(user);
         }catch(RepositoryException re){
             throw re;
+        } catch (UserException ex) {
+            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+            error.setErrorMessage(ex.getError().getMessage());
+            throw new RepositoryException(error);
         }
         
         StringBuilder query = new StringBuilder();
@@ -67,13 +78,13 @@ public class AdminRepository implements AbstractAdminRepository{
         query.append("modulemanager) VALUES(");
         query.append(admin.getId());
         query.append(", ");
-        query.append(admin.getAdminManager().toString());
+        query.append(admin.getAdminManager().toInt());
         query.append(", ");
-        query.append(admin.getLecturerManager().toString());
+        query.append(admin.getLecturerManager().toInt());
         query.append(", ");
-        query.append(admin.getScheduleManager().toString());
+        query.append(admin.getScheduleManager().toInt());
         query.append(", ");
-        query.append(admin.getModuleManager().toString());
+        query.append(admin.getModuleManager().toInt());
         query.append(")");
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
@@ -234,5 +245,19 @@ public class AdminRepository implements AbstractAdminRepository{
             }
         }
         return outputAdmins;
+    }
+    
+    private User getUserForAdmin(Admin admin,List<User> users) throws RepositoryException{
+        User outputUser = null;
+        for (User user : users) {
+            if(user.equals(admin)){
+                outputUser = user;
+                break;
+            }
+        }
+        if(outputUser == null){
+            throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
+        }
+        return outputUser;
     }
 }
