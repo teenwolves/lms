@@ -7,11 +7,22 @@ package teenwolves.com.github.lms.entity.lecturer.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import teenwolves.com.github.lms.database.MySQLDatabase;
+import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.lecturer.Lecturer;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
+import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
+import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.util.Utility;
 
 /**
  *
@@ -19,7 +30,20 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "LecturerServlet", urlPatterns = {"/admin/lecturers"})
 public class LecturerServlet extends HttpServlet {
+    // Database to access
+    private MySQLDatabase database;
+    // LecturerRepository to access Lecturer Data
+    private AbstractLecturerRepository lecturerRepository;
+    
+    // Overriding the init method
 
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        database = new LmsMySQLDatabase();
+        lecturerRepository = new LecturerRepository(database);
+    }
+    
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,7 +82,30 @@ public class LecturerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        String action = request.getParameter("action");
+        String url = null;
+        String message = "";
+        // Setting default action
+        if(!Utility.hasPresence(action)){
+            action = "view";
+        }
+        // Setting dispatching urls
+        if(action.equals("delete")){
+            url = "/admin/deletelecturer.jsp";
+        }else{
+            url = "/admin/lecturers.jsp";
+        }
+        
+        try {
+            List<Lecturer> lecturers = lecturerRepository.query(new AllUsers());
+            // Setting the lecturers as an attribute 
+            request.setAttribute("lecturers", lecturers);
+        } catch (RepositoryException ex) {
+            message = ex.getError().getErrorMessage();
+        }
+        
+        // Dispatching the request
+        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     /**
@@ -72,7 +119,7 @@ public class LecturerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doGet(request, response);
     }
 
     /**
