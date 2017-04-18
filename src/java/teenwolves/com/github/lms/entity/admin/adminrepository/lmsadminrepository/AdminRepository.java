@@ -118,6 +118,8 @@ public class AdminRepository implements AbstractAdminRepository{
         error.setErrorMessage("Admin is not deleted");
         
         RepositoryUtility.executeQuery(database, query.toString(), error);
+        
+        userRepository.deleteUser(admin);
     }
 
     @Override
