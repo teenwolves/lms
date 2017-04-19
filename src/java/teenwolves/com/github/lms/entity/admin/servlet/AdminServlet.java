@@ -23,6 +23,7 @@ import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
 import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
 import teenwolves.com.github.lms.util.Utility;
 
 /**
@@ -83,7 +84,9 @@ public class AdminServlet extends HttpServlet {
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
         String message = "";
-        String url = null;
+        String url = "/admin/admins.jsp";
+        String fileUrl = "";
+        String heading = "";
         
         // Authenticating the user
         User user = null;
@@ -97,19 +100,48 @@ public class AdminServlet extends HttpServlet {
         
         // User authenticated
         String action = request.getParameter("action");
+        String uid = request.getParameter("id");
         
-        // Setting default action
-        if(!Utility.hasPresence(action)){
+        // If an admin is requested, to update
+        if(Utility.hasPresence(action)){
+            if(action.equals("update") && Utility.hasPresence(uid)){
+                int id = Integer.parseInt(uid);
+                Admin admin = null;
+                System.out.println("\tI'm heree");
+                try {
+                    admin = user.getAdminManager()
+                            .findAdmins(new UserById(id)).get(0);
+                    
+                    fileUrl = "../includes/updateadminform.jsp";
+                    heading = "Update Admin";
+                    request.setAttribute("fileUrl", fileUrl);
+                    request.setAttribute("heading", heading);
+                    request.setAttribute("updatingAdmin", admin);
+                    
+                    Utility.dispatchRequest(getServletContext(), request, response, url, message);
+                } catch (AdminBehaviourException ex) {
+                    message = "Admin doesn't exist.";
+                    action = "update";
+                }
+            }
+        }else{
+            // Setting default action
             action = "view";
         }
         
         // Setting dispatching urls
         if(action.equals("delete")){
-            url = "/admin/deleteadmin.jsp";
+            fileUrl = "../includes/deleteadminsform.jsp";
+            heading = "Delete Admins";
+        }else if(action.equals("update")){
+            fileUrl = "../includes/selectadmintable.jsp";
+            heading = "Select Admin to update";
         }else{
-            url = "/admin/admins.jsp";
+            fileUrl = "../includes/adminstable.jsp";
+            heading = "All Admins";
         }
-        
+        request.setAttribute("fileUrl", fileUrl);
+        request.setAttribute("heading", heading);
         // Retrieving admins
         try {            
             List<Admin> admins = user.getAdminManager().findAdmins(new AllUsers());
