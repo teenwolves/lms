@@ -37,7 +37,8 @@
         <ul class="dropdown-menu">
           <li><a href="addadmin.jsp">Add Admin</a></li>
           <li><a href="#">Update Admin</a></li>
-          <li><a href="#">Delete Admin</a></li>
+          <li><a href="admins?action=delete">Delete Admin</a></li>
+          <li><a href="admins?action=view">Admins</a></li>
         </ul>
       </li>
       <li><a href="#">Settings</a></li>
