@@ -110,6 +110,9 @@ public class LecturerRepository implements AbstractLecturerRepository{
             }
         }
         
+        if(lecturers.isEmpty()){
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        }
         return lecturers;
         
     }
