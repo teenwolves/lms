@@ -10,6 +10,7 @@ import java.util.logging.Logger;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
 import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourError;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminManager;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
@@ -35,18 +36,32 @@ public class LmsAdminManager implements AdminManager{
         try {
             adminRepository.addAdmin(admin);
         } catch (RepositoryException ex) {
-            Logger.getLogger(LmsAdminManager.class.getName()).log(Level.SEVERE, null, ex);
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("Admin is not added.");
+            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
         }
     }
 
     @Override
     public void updateAdmin(Admin admin) throws AdminBehaviourException {
-        
+        try {
+            adminRepository.updateAdmin(admin);
+        } catch (RepositoryException ex) {
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("Admin is not updated.");
+            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+        }
     }
 
     @Override
     public void deleteAdmin(Admin admin) throws AdminBehaviourException {
-        
+        try {
+            adminRepository.deleteAdmin(admin);
+        } catch (RepositoryException ex) {
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("Admin is not deleted.");
+            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+        }
     }
 
     @Override
