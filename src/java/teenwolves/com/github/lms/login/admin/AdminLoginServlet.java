@@ -26,6 +26,7 @@ import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserByUsernameAndPassword;
+import teenwolves.com.github.lms.entity.user.utilities.UserUtilities;
 import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.login.utility.LoginUtility;
 import teenwolves.com.github.lms.repository.RepositoryError;
@@ -124,11 +125,10 @@ public class AdminLoginServlet extends HttpServlet {
                 
                 // if remember me is checked
                 if(isRememberMeChecked){
-                    Cookie user = new Cookie("admin", admin.getUsername());
+                    Cookie user = new Cookie("lmsuser", username);
                     response.addCookie(user);
                 }else{
-                    HttpSession session = request.getSession();
-                    session.setAttribute("user", admin);
+                    request.getSession().setAttribute("user", admin);
                 }
                 
                 
