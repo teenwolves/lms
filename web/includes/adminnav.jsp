@@ -36,7 +36,7 @@
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Admin <span class="caret"></span></a>
         <ul class="dropdown-menu">
           <li><a href="addadmin.jsp">Add Admin</a></li>
-          <li><a href="#">Update Admin</a></li>
+          <li><a href="admins?action=update">Update Admin</a></li>
           <li><a href="admins?action=delete">Delete Admin</a></li>
           <li><a href="admins?action=view">Admins</a></li>
         </ul>
