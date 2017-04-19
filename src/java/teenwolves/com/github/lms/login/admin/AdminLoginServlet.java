@@ -42,6 +42,8 @@ public class AdminLoginServlet extends HttpServlet {
     // Repositories to access Admin data
     private AbstractAdminRepository adminRepository;
     private MySQLDatabase database;
+    // User cookie age to one year
+    private static final int MAX_AGE = 31536000;
     
     //Overiding the init method to set up repositories and databases
     @Override
@@ -125,7 +127,9 @@ public class AdminLoginServlet extends HttpServlet {
                 
                 // if remember me is checked
                 if(isRememberMeChecked){
+                    // Create cookie for the user
                     Cookie user = new Cookie("lmsuser", username);
+                    user.setMaxAge(MAX_AGE);
                     response.addCookie(user);
                 }else{
                     request.getSession().setAttribute("user", admin);
