@@ -5,6 +5,7 @@
  */
 package teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour;
 
+import java.util.List;
 import teenwolves.com.github.lms.entity.admin.Admin;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourError;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
@@ -31,6 +32,11 @@ public class UnauthorizedAdminManager implements AdminManager{
         throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
     }
 
+    @Override
+    public List<Admin> findAllAdmins() throws AdminBehaviourException {
+            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+    }
+    
     @Override
     public int toInt() {
         return 0;

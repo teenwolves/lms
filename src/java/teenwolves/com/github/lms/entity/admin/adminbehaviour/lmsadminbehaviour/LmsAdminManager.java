@@ -5,6 +5,7 @@
  */
 package teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import teenwolves.com.github.lms.database.MySQLDatabase;
@@ -15,6 +16,7 @@ import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourExcep
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminManager;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
 import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
 import teenwolves.com.github.lms.repository.RepositoryException;
 
 /**
@@ -38,7 +40,7 @@ public class LmsAdminManager implements AdminManager{
         } catch (RepositoryException ex) {
             AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
             error.setMessage("Admin is not added.");
-            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+            throw new AdminBehaviourException(error);
         }
     }
 
@@ -49,7 +51,7 @@ public class LmsAdminManager implements AdminManager{
         } catch (RepositoryException ex) {
             AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
             error.setMessage("Admin is not updated.");
-            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+            throw new AdminBehaviourException(error);
         }
     }
 
@@ -60,7 +62,18 @@ public class LmsAdminManager implements AdminManager{
         } catch (RepositoryException ex) {
             AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
             error.setMessage("Admin is not deleted.");
-            throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+            throw new AdminBehaviourException(error);
+        }
+    }
+
+    @Override
+    public List<Admin> findAllAdmins() throws AdminBehaviourException {
+        try {
+            return adminRepository.query(new AllUsers());
+        } catch (RepositoryException ex) {
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("No Admins are found");
+            throw new AdminBehaviourException(error);
         }
     }
 
