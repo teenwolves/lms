@@ -16,10 +16,14 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
 import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
+import teenwolves.com.github.lms.entity.user.User;
+import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
+import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.util.Utility;
 
@@ -29,8 +33,8 @@ import teenwolves.com.github.lms.util.Utility;
  */
 @WebServlet(name = "AddLecturerServlet", urlPatterns = {"/admin/addlecturer"})
 public class AddLecturerServlet extends HttpServlet {
-    // Lecturer repository to access lecturer data
-    private AbstractLecturerRepository lecturerRepository;
+    // UserAuthentor object to authenticate user
+    private UserAuthenticator authenticator;
     // Database to access data from
     private MySQLDatabase database;
 
@@ -38,7 +42,7 @@ public class AddLecturerServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         database = new LmsMySQLDatabase();
-        lecturerRepository = new LecturerRepository(database);
+        authenticator = new UserAuthenticator(database);
     }
 
     /**
@@ -93,7 +97,18 @@ public class AddLecturerServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Message to send
         String message = null;
+        String url = null;
+        // Authenticate user
+        User user = null;
+        try {
+            user = authenticator.getUser(request);
+        } catch (AuthenticationException ex) {
+            message = "Please login.";
+            url = "/admin/login.jsp";
+            Utility.dispatchRequest(getServletContext(), request, response, url, message);
+        }
         
         // Getting the request parameter values
         String name = request.getParameter("name");
@@ -125,13 +140,14 @@ public class AddLecturerServlet extends HttpServlet {
                 lecturer.setUsername(username);
                 lecturer.setPassword(password);
 
-                lecturerRepository.addLecturer(lecturer);
+                // User add the lecturer
+                user.getLecturerManager().addLecturer(lecturer);
                 // Setting a message saying that the lecturer is added
                 message = "Lecturer is added successfully.";
             } catch (UserException ex) {
                 message = ex.getError().getMessage();
-            } catch (RepositoryException ex) {
-                message = ex.getError().getErrorMessage();
+            } catch (AdminBehaviourException ex) {
+                message = ex.getError().getMessage();
             }
             
         }else{
