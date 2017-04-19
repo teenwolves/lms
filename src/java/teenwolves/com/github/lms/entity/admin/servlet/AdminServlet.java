@@ -22,6 +22,7 @@ import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourExcep
 import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
 import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
 import teenwolves.com.github.lms.util.Utility;
 
 /**
@@ -111,7 +112,7 @@ public class AdminServlet extends HttpServlet {
         
         // Retrieving admins
         try {            
-            List<Admin> admins = user.getAdminManager().findAllAdmins();
+            List<Admin> admins = user.getAdminManager().findAdmins(new AllUsers());
             
             // Set the admins in the request
             request.setAttribute("admins", admins);
