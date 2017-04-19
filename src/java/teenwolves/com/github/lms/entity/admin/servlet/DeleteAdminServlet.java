@@ -14,7 +14,16 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourError;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
+import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
+import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
+import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
+import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.util.Utility;
 
 /**
  *
@@ -89,7 +98,70 @@ public class DeleteAdminServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        String message = "";
+        String url = "/admin/admins";
+        AdminBehaviourError error = null;
         
+        // Authenticating the user
+        User user = null;
+        try {
+            user = authenticator.getUser(request);
+        } catch (AuthenticationException ex) {
+            message = "Please login.";
+            url = "/admin/login.jsp";
+            Utility.dispatchRequest(getServletContext(), request, response, url, message);
+        }
+        
+        // User is authenticated
+        
+        // Deleted count of admins
+        int deleted = 0;
+        
+        String deletingAdmins [] = request.getParameterValues("deletingadmins");
+        Admin admin = null;
+        int id;
+        // Checking if any admin is selected
+        if(deletingAdmins != null){
+            for (String deletingLecturer : deletingAdmins) {
+                id = Integer.parseInt(deletingLecturer);
+                try {
+                    // Get the matching admin for the id
+                    admin = user.getAdminManager().findAdmins(new UserById(id)).get(0);
+                    
+                    // Delete the admin
+                    user.getAdminManager().deleteAdmin(admin);
+                    // Incrementing the count
+                    deleted++;
+                } catch (AdminBehaviourException ex) {
+                    error = ex.getError();
+                }
+            }
+        }else{
+            // No lecturer is selected
+            message = "Please select the admins to delete.";
+            url = "/admin/admins?action=delete";
+        }
+        
+        // Setting the deleted admin message
+        String deletionMessage = "";
+        if (deleted > 0) {
+            if (deleted == 1) {
+                message += "1 admin is deleted.";
+            } else {
+                message += deleted + " admins are deleted.";
+            }
+        }
+        
+        if(error != null){
+            message = "Error occurred. " + deletionMessage;
+            url = "/admin/admins?action=delete";
+        }
+        
+        // Setting the message
+        request.setAttribute("message", message);
+        
+        // Dispatching the request
+        getServletContext().getRequestDispatcher(url).forward(request, response);
     }
 
     /**
