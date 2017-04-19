@@ -16,6 +16,7 @@ import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourExcep
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminManager;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
 import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
 import teenwolves.com.github.lms.repository.RepositoryException;
 
@@ -67,9 +68,9 @@ public class LmsAdminManager implements AdminManager{
     }
 
     @Override
-    public List<Admin> findAllAdmins() throws AdminBehaviourException {
+    public List<Admin> findAdmins(UserSpecification specification) throws AdminBehaviourException {
         try {
-            return adminRepository.query(new AllUsers());
+            return adminRepository.query(specification);
         } catch (RepositoryException ex) {
             AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
             error.setMessage("No Admins are found");

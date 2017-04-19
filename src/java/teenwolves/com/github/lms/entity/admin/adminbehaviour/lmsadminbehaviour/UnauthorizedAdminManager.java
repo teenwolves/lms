@@ -10,6 +10,7 @@ import teenwolves.com.github.lms.entity.admin.Admin;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourError;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminManager;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 
 /**
  *
@@ -33,7 +34,7 @@ public class UnauthorizedAdminManager implements AdminManager{
     }
 
     @Override
-    public List<Admin> findAllAdmins() throws AdminBehaviourException {
+    public List<Admin> findAdmins(UserSpecification specification) throws AdminBehaviourException {
             throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
     }
     

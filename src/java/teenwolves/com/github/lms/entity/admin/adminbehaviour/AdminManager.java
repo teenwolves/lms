@@ -7,6 +7,7 @@ package teenwolves.com.github.lms.entity.admin.adminbehaviour;
 
 import java.util.List;
 import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 
 /**
  *
@@ -17,5 +18,5 @@ public interface AdminManager extends AdminBehaviour{
     public void updateAdmin(Admin admin) throws AdminBehaviourException;
     public void deleteAdmin(Admin admin) throws AdminBehaviourException;
 
-    public List<Admin> findAllAdmins() throws AdminBehaviourException;
+    public List<Admin> findAdmins(UserSpecification specification) throws AdminBehaviourException;
 }
