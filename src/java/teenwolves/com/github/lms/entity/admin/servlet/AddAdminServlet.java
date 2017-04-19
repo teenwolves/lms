@@ -139,7 +139,9 @@ public class AddAdminServlet extends HttpServlet {
                 admin = new Admin();
                 admin.setName(name);
                 admin.setEmail(email);
-                admin.setUsername(username);
+                if(UserUtilities.isUserNameUnique(username)){
+                    admin.setUsername(username);
+                }
                 admin.setPassword(password);
                 admin.setAdminManager(
                         AdminUtilities.getAdminManager(isAdminManager));
