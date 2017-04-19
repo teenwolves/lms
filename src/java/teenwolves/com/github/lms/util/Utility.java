@@ -5,12 +5,16 @@
  */
 package teenwolves.com.github.lms.util;
 
+import java.io.IOException;
 import java.time.Instant;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.Date;
+import javax.servlet.ServletContext;
+import javax.servlet.ServletException;
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
 import teenwolves.com.github.lms.entity.user.User;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
@@ -21,6 +25,13 @@ import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRep
  * @author Sudarshana Panditha
  */
 public class Utility {
+    
+    public static void dispatchRequest(ServletContext context, 
+            HttpServletRequest request, 
+            HttpServletResponse response, 
+            String url, String message) throws IOException, ServletException{
+        context.getRequestDispatcher(url).forward(request, response);
+    }
     
     public static boolean hasPresence(String input){
         return input != null && !input.isEmpty();
@@ -49,29 +60,5 @@ public class Utility {
                 year,month,day,hour,minutes,seconds);
         
         return timestamp;
-    }
-    
-    public static boolean isUserLoggedIn(String user, HttpServletRequest request){
-        Cookie userCookie = Utility.getCookie("user", request);
-        boolean isUserSet = Utility.isCookieSet(userCookie);
-        return isUserSet;
-    }
-    
-    public static Cookie getCookie(String name, HttpServletRequest request){
-        Cookie cookies [] = request.getCookies();
-        for (Cookie cookie : cookies) {
-            if(cookie.getName().equals(name)){
-                return cookie;
-            }
-        }
-        return null;
-    }
-    
-    public static boolean isCookieSet(Cookie cookie){
-        if(cookie == null){
-            return false;
-        }else{
-            return Utility.hasPresence(cookie.getValue());
-        }
     }
 }
