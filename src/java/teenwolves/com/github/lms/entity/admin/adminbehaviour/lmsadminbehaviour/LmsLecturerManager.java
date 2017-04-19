@@ -45,6 +45,18 @@ public class LmsLecturerManager implements LecturerManager{
     }
 
     @Override
+    public void deleteLecturer(Lecturer lecturer) throws AdminBehaviourException {
+        try {
+            // Deleting the lecturer
+            lecturerRepository.deleteLecturer(lecturer);
+        } catch (RepositoryException ex) {
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("Lecturer is not deleted.");
+            throw new AdminBehaviourException(error);
+        }
+    }
+
+    @Override
     public int toInt() {
         return 1;
     }

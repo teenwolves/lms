@@ -9,4 +9,5 @@ import teenwolves.com.github.lms.repository.RepositoryException;
  */
 public interface LecturerManager extends AdminBehaviour{
     public void addLecturer(Lecturer lecturer) throws AdminBehaviourException;
+    public void deleteLecturer(Lecturer lecturer) throws AdminBehaviourException;
 }
