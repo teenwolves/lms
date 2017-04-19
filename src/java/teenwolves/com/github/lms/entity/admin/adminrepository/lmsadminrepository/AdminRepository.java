@@ -150,7 +150,9 @@ public class AdminRepository implements AbstractAdminRepository{
                 throw re;
             }
         }
-        
+        if(admins == null || admins.isEmpty()){
+            throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
+        }
         return admins;
     }
 
