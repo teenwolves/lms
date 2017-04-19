@@ -20,44 +20,6 @@ import teenwolves.com.github.lms.entity.user.User;
  * @see User
  */
 public class Admin extends User implements Serializable{
-    // Admin id
-    private AdminManager adminManager;
-    private ScheduleManager scheduleManager;
-    private LecturerManager lecturerManager;
-    private ModuleManager moduleManager;
-
-    public AdminManager getAdminManager() {
-        return adminManager;
-    }
-
-    public void setAdminManager(AdminManager adminManager) {
-        this.adminManager = adminManager;
-    }
-
-    public ScheduleManager getScheduleManager() {
-        return scheduleManager;
-    }
-
-    public void setScheduleManager(ScheduleManager scheduleManager) {
-        this.scheduleManager = scheduleManager;
-    }
-
-    public LecturerManager getLecturerManager() {
-        return lecturerManager;
-    }
-
-    public void setLecturerManager(LecturerManager lecturerManager) {
-        this.lecturerManager = lecturerManager;
-    }
-
-    public ModuleManager getModuleManager() {
-        return moduleManager;
-    }
-
-    public void setModuleManager(ModuleManager moduleManager) {
-        this.moduleManager = moduleManager;
-    }
-
     /**
      * Class constructor with no arguments
      */
