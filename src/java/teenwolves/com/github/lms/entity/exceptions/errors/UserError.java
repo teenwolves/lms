@@ -11,7 +11,8 @@ package teenwolves.com.github.lms.entity.exceptions.errors;
  */
 public enum UserError {
     INVALID_VALUE,
-    INVALID_SIZE;
+    INVALID_SIZE,
+    TECHNICAL_ERROR;
     
     // Info about the error
     private String message;
