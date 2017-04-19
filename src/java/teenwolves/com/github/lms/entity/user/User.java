@@ -6,6 +6,15 @@
 package teenwolves.com.github.lms.entity.user;
 
 import java.io.Serializable;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.LecturerManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.ModuleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.ScheduleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.LmsScheduleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedAdminManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedLecturerManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedModuleManager;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour.UnauthorizedScheduleManager;
 import teenwolves.com.github.lms.entity.exceptions.UserException;
 import teenwolves.com.github.lms.entity.exceptions.errors.UserError;
 
@@ -20,6 +29,11 @@ public class User implements Serializable{
     private String username;
     private String password;
     private String email;
+    
+    private AdminManager adminManager;
+    private LecturerManager lecturerManager;
+    private ModuleManager moduleManager;
+    private ScheduleManager scheduleManager;
 
     public User() {
         id = -1;
@@ -27,6 +41,10 @@ public class User implements Serializable{
         username = "";
         password = "";
         email = "";
+        adminManager = new UnauthorizedAdminManager();
+        lecturerManager = new UnauthorizedLecturerManager();
+        moduleManager = new UnauthorizedModuleManager();
+        scheduleManager = new UnauthorizedScheduleManager();
     }
 
     public int getId() {
@@ -93,6 +111,38 @@ public class User implements Serializable{
             throw new UserException(error);
         }
         this.email = email;
+    }
+    
+    public AdminManager getAdminManager() {
+        return adminManager;
+    }
+
+    public void setAdminManager(AdminManager adminManager) {
+        this.adminManager = adminManager;
+    }
+
+    public LecturerManager getLecturerManager() {
+        return lecturerManager;
+    }
+
+    public void setLecturerManager(LecturerManager lecturerManager) {
+        this.lecturerManager = lecturerManager;
+    }
+
+    public ModuleManager getModuleManager() {
+        return moduleManager;
+    }
+
+    public void setModuleManager(ModuleManager moduleManager) {
+        this.moduleManager = moduleManager;
+    }
+
+    public ScheduleManager getScheduleManager() {
+        return scheduleManager;
+    }
+
+    public void setScheduleManager(ScheduleManager scheduleManager) {
+        this.scheduleManager = scheduleManager;
     }
     
     public void setAttributes(User user) throws UserException{
