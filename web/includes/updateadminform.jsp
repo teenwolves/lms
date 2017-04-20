@@ -32,7 +32,7 @@
                     <div class="checkbox">
                         <div class="col-sm-10 col-sm-offset-2">
                             <label>
-                                <input type="checkbox" name="adminmanager">Admin Manager
+                                <input type="checkbox" value="true" name="adminmanager">Admin Manager
                             </label>
                         </div>
                     </div>
@@ -41,7 +41,7 @@
                     <div class="checkbox">
                         <div class="col-sm-10 col-sm-offset-2">
                             <label>
-                                <input type="checkbox" name="lecturermanager">Lecturer Manager
+                                <input type="checkbox" value="true" name="lecturermanager">Lecturer Manager
                             </label>
                         </div>
                     </div>
@@ -50,7 +50,7 @@
                     <div class="checkbox">
                         <div class="col-sm-10 col-sm-offset-2">
                             <label>
-                                <input type="checkbox" name="modulemanager">Module Manager
+                                <input type="checkbox" value="true" name="modulemanager">Module Manager
                             </label>
                         </div>
                     </div>
@@ -59,7 +59,7 @@
                     <div class="checkbox">
                         <div class="col-sm-10 col-sm-offset-2">
                             <label>
-                                <input type="checkbox" name="schedulemanager">Schedule Manager
+                                <input type="checkbox" value="true" name="schedulemanager">Schedule Manager
                             </label>
                         </div>
                     </div>
