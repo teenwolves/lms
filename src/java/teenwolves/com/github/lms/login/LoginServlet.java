@@ -12,6 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -26,6 +27,7 @@ import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerr
 import teenwolves.com.github.lms.entity.student.Student;
 import teenwolves.com.github.lms.entity.student.studentrepository.AbstractStudentRepository;
 import teenwolves.com.github.lms.entity.student.studentrepository.lmsstudentrepository.StudentRepository;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.UserById;
 import teenwolves.com.github.lms.repository.RepositoryError;
@@ -42,18 +44,20 @@ import teenwolves.com.github.lms.util.Utility;
  */
 @WebServlet(name = "LoginServlet", urlPatterns = {"/login"})
 public class LoginServlet extends HttpServlet {
+    // Database to access
+    private MySQLDatabase database;
     // AbstractUserRepository to access Database
-    private AbstractUserRepository userRepository;
     private AbstractStudentRepository studentRepository;
     private AbstractLecturerRepository lecturerRepository;
+    // User cookie age to one year
+    private static final int MAX_AGE = 31536000;
             
     
     // Setting up a Repository
     @Override
     public void init() throws ServletException {
         super.init();
-        MySQLDatabase database = new LmsMySQLDatabase();
-        userRepository = new UserRepository(database);
+        database = new LmsMySQLDatabase();
         studentRepository = new StudentRepository(database);
         lecturerRepository = new LecturerRepository(database);
     }
@@ -112,10 +116,12 @@ public class LoginServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
+        // Url to dispatch
+        String url = "/home.jsp";
+        String message = "";
+        
         // local variables to instantiate a User
         User user = null;
-        Student student = null;
-        Lecturer lecturer = null;
         
         // Retrieving form data
         String username = request.getParameter("username");
@@ -123,102 +129,52 @@ public class LoginServlet extends HttpServlet {
         
         // General Validations
         if(Utility.hasPresence(username) && Utility.hasPresence(password)){
+            username = Utility.inputFormat(username);
+            password = Utility.inputFormat(password);
+
+            // specification to get user for matching username and password
+            UserSpecification specification = new UserByUsernameAndPassword(username, password);
+            System.out.println("Trying to find");
             try {
-                // Formatting the inputs
-                username = Utility.inputFormat(username);
-                password = Utility.inputFormat(password);
-                
-                // Retrieving the user who matches username and password
-                List<User> users = userRepository.query(
-                        new UserByUsernameAndPassword(username, password));
-                
-                // User who matches the username and password
-                user = users.get(0);
-                
-                /*// Setting the user to the Session object
-                HttpSession session = request.getSession();
-                session.setAttribute("user", user);
-                
-                // Redirecting to the home page
-                response.sendRedirect("home.jsp");*/
-                
+                // Checking in the Student repository
+                user = studentRepository.query(specification).get(0);
+                System.out.println("student found.");
             } catch (RepositoryException ex) {
-                String url = "/login.jsp";
-                LoginUtility.forwardError(getServletContext(), request, 
-                            response, url, ex.getError());
-                
-            }
-            
-            try {
-                // Checking if the user is a student
-                List<Student> students = studentRepository.query(
-                        new UserById(user.getId()));
-                
-                student = students.get(0);
-                // Setting User attributes
-                student.setName(user.getName());
-                student.setEmail(user.getEmail());
-                student.setUsername(user.getUsername());
-                student.setPassword(user.getPassword());
-                
-                // Setting the user to the Session object
-                HttpSession session = request.getSession();
-                session.setAttribute("user", student);
-                
-                // Redirecting to the home page
-                response.sendRedirect("home.jsp");
-                
-            } catch (RepositoryException ex) {
-                
-                if(ex.getError() == RepositoryError.USER_NOT_FOUND){
-                    try {
-                        // Checking if the user is a lecturer
-                        List<Lecturer> lecturers = lecturerRepository.query(
-                                new UserById(user.getId()));
-                        
-                        lecturer = lecturers.get(0);
-                        
-                        // Setting User attributes
-                        lecturer.setAttributes(user);
-                        
-                        // Setting the user to the Session object
-                        HttpSession session = request.getSession();
-                        session.setAttribute("user", lecturer);
-                        
-                        // Redirecting to the home page
-                        response.sendRedirect("home.jsp");
-                        
-                    } catch (RepositoryException ex1) {
-                        String url = "/login.jsp";
-                        LoginUtility.forwardError(getServletContext(), request, 
-                            response, url, ex.getError());
-                    } catch (UserException ex1) {
-                        String url = "/login.jsp";
-                        RepositoryError error = RepositoryError.TECHNICAL_ERROR;
-                        LoginUtility.forwardError(getServletContext(), request, 
-                            response, url, error);
-                    }
-                    
-                }else{
-                    String url = "/login.jsp";
-                    LoginUtility.forwardError(getServletContext(), request, 
-                            response, url, ex.getError());
+                System.out.println("" + ex.getError().getErrorMessage());
+                try {
+                    // Checking in the Lecturer repository
+                    user = lecturerRepository.query(specification).get(0);
+                    System.out.println("lecturer found.");
+                } catch (RepositoryException ex1) {
+                    System.out.println("No user found");
+                    url = "/login.jsp";
+                    message = "Please check your username and password.";
                 }
-                
-            } catch (UserException ex) {
-                String url = "/login.jsp";
-                RepositoryError error = RepositoryError.TECHNICAL_ERROR;
-                LoginUtility.forwardError(getServletContext(), request, 
-                            response, url, error);
+            }
+
+            // User found
+            // if remember me is checked
+            boolean isRememberMeChecked = LoginUtility.isChecked(
+                    request.getParameter("rememberme"), "on");
+
+            // if remember me is checked
+            if (isRememberMeChecked) {
+                // Create cookie for the user
+                Cookie userCookie = new Cookie("lmsuser", username);
+                userCookie.setMaxAge(MAX_AGE);
+                response.addCookie(userCookie);
+            } else {
+                request.getSession().setAttribute("user", user);
             }
           
         }else{
-            String url = "/login.jsp";
-            LoginUtility.forwardError(getServletContext(), request, 
-                            response, url, RepositoryError.USER_NOT_FOUND);
+            url = "/login.jsp";
+            message = "Please check your username and password.";
+            System.out.println("No presence");
         }
         
-        
+        Utility.dispatchRequest(getServletContext(), request, response,
+                url, message);
         
     }
 
