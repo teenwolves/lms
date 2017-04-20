@@ -57,22 +57,19 @@ public class UserAuthenticator {
                     // Search in Student
                     user = studentRepository.query(
                             new UserByUsername(userCookie.getValue())).get(0);
-                    // Return the found user
-                    return user;
+                    
                 } catch (RepositoryException ex) {
                     try {
                         // Search in Lecturer
                         user = lecturerRepository.query(
                                 new UserByUsername(userCookie.getValue())).get(0);
-                        // Return the found user
-                        return user;
+                        
                     } catch (RepositoryException ex1) {
                         try {
                             // Search in Admin
                             user = adminRepository.query(
                                     new UserByUsername(userCookie.getValue())).get(0);
-                            // Return the found user
-                            return user;
+                            
                         } catch (RepositoryException ex2) {
                             throw new AuthenticationException(AuthenticationError.UNIDENTIFIED_USER);
                         }
@@ -85,6 +82,8 @@ public class UserAuthenticator {
         
         if(user == null){
             throw new AuthenticationException(AuthenticationError.USER_NOT_FOUND);
+        }else{
+            session.setAttribute("user", user);
         }
         return user;
     }
