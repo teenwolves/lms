@@ -5,10 +5,58 @@
  */
 package teenwolves.com.github.lms.entity.module;
 
+import java.io.Serializable;
+import teenwolves.com.github.lms.entity.module.moduledescriptor.ModuleDescriptor;
+
 /**
  *
  * @author Sudarshana Panditha
  */
-public class Module {
+public class Module implements Serializable{
+    private int id;
+    private int lecturerId;
+    private int courseid;
+    private ModuleDescriptor descriptor;
+
+    public Module() {
+        this.id = 0;
+        this.lecturerId = 0;
+        
+        this.descriptor = new ModuleDescriptor();
+    }
+
+    // Getters and setters
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public int getLecturerId() {
+        return lecturerId;
+    }
+
+    public void setLecturerId(int lecturerId) {
+        this.lecturerId = lecturerId;
+    }
+
+    public int getCourseid() {
+        return courseid;
+    }
+
+    public void setCourseid(int courseid) {
+        this.courseid = courseid;
+    }
+    
+    public ModuleDescriptor getDescriptor() {
+        return descriptor;
+    }
+
+    public void setDescriptor(ModuleDescriptor descriptor) {
+        this.descriptor = descriptor;
+    }
+    
     
 }
