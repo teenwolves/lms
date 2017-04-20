@@ -9,60 +9,55 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <meta name="viewport" content="width=device-width, initial-scale=1">
-        <link rel="stylesheet" href="css/bootstrap.min.css">
-        <link rel="stylesheet" href="css/styles.css">
         <title>Add Module</title>
+        <%@include file="../includes/admincsslinks.jsp" %>
     </head>
     <body>
+        <%@include file="../includes/adminnav.jsp" %>
+        <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <div class="container">
-		<div class="row">
-			<section class="col-xs-12">
+            <div class="row">
+                <section class="col-xs-12">
 
-	<form class="form-horizontal">
-		<div class="form-group">
-			<label class="col-sm-2 control-label" for="name">Name</label>
-			<div class="col-sm-10">
-				<input class="form-control" id="name" type="text" name="name">
-			</div>
-		</div>
-		<div class="form-group">
-			<label class="col-sm-2 control-label" for="email">Email</label>
-			<div class="col-sm-10">
-				<input class="form-control" id="email" type="text" name="email">
-			</div>
-		</div>
-		<div class="form-group">
-  			<label class="col-sm-2 control-label" for="jobstatus">Job</label>
-  			<div class="col-sm-10">
-  			<select name="jobstatus" class="form-control" id="jobstatus">
-    			<option value="unemployeed">Unemployed</option>
-    			<option value="employeed">Employeed</option>
-    			<option value="freelancer">Freelancer</option>
-  			</select>
-  			</div>
-		</div>
-		<div class="form-group">
-			<div class="checkbox">
-			<div class="col-sm-10 col-sm-offset-2">
-			<label>
-				<input type="checkbox" name="subscribe">Subscribe to our newsletter
-			</label>
-			</div>
-			</div>
-		</div>
-		<div class="form-group">
-			<div class="col-sm-10 col-sm-offset-2">
-				<input class="btn btn-default" type="submit" value="Submit">
-			</div>
-		</div>
-	</form>
+                    <form class="form-horizontal">
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="title">Module Title</label>
+                            <div class="col-sm-10">
+                                <input class="form-control" id="title" type="text" name="title">
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="lecturer">Lecturer</label>
+                            <div class="col-sm-10">
+                                <select name="lecturer" class="form-control" id="lecturer">
+                                    <c:forEach var="lecturer" items="${lecturers}">
+                                        <option value="<c:out value="${lecturer.id}"/>">
+                                            <c:out value="${lecturer.name}"/>
+                                        </option>
+                                    </c:forEach>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label class="col-sm-2 control-label" for="course">Faculty</label>
+                            <div class="col-sm-10">
+                                <select name="course" class="form-control" id="course">
+                                    <option value="1">Computing</option>
+                                    <option value="2">Management</option>
+                                    <option value="3">Engineering</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <input class="btn btn-default" type="submit" value="Add Module">
+                            </div>
+                        </div>
+                    </form>
 
-			</section>
-		</div>
-	</div>
-        <script src="js/jquery-2.1.4.min.js"></script>
-        <script src="js/bootstrap.min.js"></script>
-        <script src="js/script.js"></script>
+                </section>
+            </div>
+        </div>
+        <%@include file="../includes/adminjsscripts.jsp" %>
     </body>
 </html>
