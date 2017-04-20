@@ -17,10 +17,14 @@ import javax.servlet.http.HttpServletResponse;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
 import teenwolves.com.github.lms.entity.admin.Admin;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
 import teenwolves.com.github.lms.entity.admin.adminrepository.AbstractAdminRepository;
 import teenwolves.com.github.lms.entity.admin.adminrepository.lmsadminrepository.AdminRepository;
 import teenwolves.com.github.lms.entity.admin.utilities.AdminUtilities;
 import teenwolves.com.github.lms.entity.exceptions.UserException;
+import teenwolves.com.github.lms.entity.user.User;
+import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
+import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
 import teenwolves.com.github.lms.entity.user.utilities.UserUtilities;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.util.Utility;
@@ -35,6 +39,8 @@ public class AddAdminServlet extends HttpServlet {
     private MySQLDatabase database;
     // AdminRepository to access the database
     private AbstractAdminRepository adminRepository;
+    // UserAuthenticattor to authenticate user
+    private UserAuthenticator authenticator;
     
     // Overriding the init method to setup database and repositories
 
@@ -42,6 +48,7 @@ public class AddAdminServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         database = new LmsMySQLDatabase();
+        authenticator = new UserAuthenticator(database);
         adminRepository = new AdminRepository(database);
     }
     
@@ -102,6 +109,16 @@ public class AddAdminServlet extends HttpServlet {
         String message = "";
         String url = "/admin/addadmin.jsp";
         
+        // Authenticating the USer
+        User user = null;
+        try {
+            user = authenticator.getUser(request);
+        } catch (AuthenticationException ex) {
+            message = "Please login.";
+            url = "/admin/login.jsp";
+            Utility.dispatchRequest(getServletContext(), request, response, url, message);
+        }
+        
         // Admin to add
         Admin admin = null;
 
@@ -153,14 +170,14 @@ public class AddAdminServlet extends HttpServlet {
                         AdminUtilities.getScheduleManager(isScheduleManager));
                 
                 // Adding the Admin to the database
-                adminRepository.addAdmin(admin);
+                user.getAdminManager().addAdmin(admin);
                 
                 message = "Admin is successfully added";
                 
             } catch (UserException ex) {
                 message = ex.getError().getMessage();
-            } catch (RepositoryException ex) {
-                message = ex.getError().getErrorMessage();
+            } catch (AdminBehaviourException ex) {
+                message = ex.getError().getMessage();
             }
             
         }
