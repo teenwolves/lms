@@ -65,7 +65,7 @@ public class ScheduleRepository implements AbstractScheduleRepository{
     @Override
     public void updateSchedule(Schedule schedule) throws RepositoryException {
         StringBuilder query = new StringBuilder();
-        query.append("UPDATE schedule SET");
+        query.append("UPDATE schedule SET ");
         query.append("courseid = ");
         query.append(schedule.getCourse().getCourseId());
         query.append(", year = ");
