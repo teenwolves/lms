@@ -5,8 +5,12 @@
  */
 package teenwolves.com.github.lms.entity.module.modulerepository.lmsmodulerepository;
 
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import teenwolves.com.github.lms.database.MySQLDatabase;
+import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.module.Module;
 import teenwolves.com.github.lms.entity.module.modulerepository.AbstractModuleRepository;
 import teenwolves.com.github.lms.entity.module.modulespecification.ModuleSpecification;
@@ -26,12 +30,16 @@ public class ModuleRepository implements AbstractModuleRepository{
     public void addModule(Module module) throws RepositoryException {
         StringBuilder query  = new StringBuilder();
         query.append("INSERT INTO module");
-        query.append("(lecturerid, courseid, mdid) ");
+        query.append("(lecturerid, courseid, title, description) ");
         query.append("VALUES(");
         query.append(module.getLecturerId());
         query.append(", ");
         query.append(module.getCourseid());
-        query.append(")");
+        query.append(", '");
+        query.append(module.getTitle());
+        query.append("' , '");
+        query.append(module.getDescription());
+        query.append("')");
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Module is not added");
@@ -48,7 +56,11 @@ public class ModuleRepository implements AbstractModuleRepository{
         query.append(module.getLecturerId());
         query.append(", courseid = ");
         query.append(module.getCourseid());
-        query.append(" WHERE id = ");
+        query.append(", title = '");
+        query.append(module.getTitle());
+        query.append("', description = '");
+        query.append(module.getDescription());
+        query.append("' WHERE id = ");
         query.append(module.getId());
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
@@ -59,12 +71,57 @@ public class ModuleRepository implements AbstractModuleRepository{
 
     @Override
     public void deleteModule(Module module) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        StringBuilder query = new StringBuilder();
+        query.append("DELETE FROM module WHERE id = ");
+        query.append(module.getId());
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Module is not deleted");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
     public List<Module> query(ModuleSpecification specification) throws RepositoryException {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        List<Module> modules = null;
+        String query = "SELECT * FROM module";
+        
+        try {
+            //Connecting to the database
+            database.connect();
+            
+            //Get results
+            ResultSet rows = database.select(query);
+            
+            // creating the list of modules
+            Module module = null;
+            while (rows.next()) {
+                module = new Module();
+                module.setId(rows.getInt("id"));
+                module.setLecturerId(rows.getInt("lecturerid"));
+                module.setCourseid(rows.getInt("courseid"));
+                module.setTitle(rows.getString("title"));
+                module.setDescription(rows.getString("description"));
+                
+                if(specification.specify(module)){
+                    if(modules == null){
+                        modules = new ArrayList<>();
+                    }
+                    modules.add(module);
+                }
+            }
+            
+        } catch (MySQLDatabaseException ex) {
+            throw new RepositoryException(RepositoryError.TECHNICAL_ERROR);
+        } catch (SQLException ex) {
+            throw new RepositoryException(RepositoryError.MODULES_NOT_FOUND);
+        }
+        
+        if(modules == null){
+            throw new RepositoryException(RepositoryError.MODULES_NOT_FOUND);
+        }
+        
+        return modules;
     }
     
 }
