@@ -6,7 +6,6 @@
 package teenwolves.com.github.lms.entity.module;
 
 import java.io.Serializable;
-import teenwolves.com.github.lms.entity.module.moduledescriptor.ModuleDescriptor;
 
 /**
  *
@@ -16,13 +15,11 @@ public class Module implements Serializable{
     private int id;
     private int lecturerId;
     private int courseid;
-    private ModuleDescriptor descriptor;
 
     public Module() {
         this.id = 0;
         this.lecturerId = 0;
-        
-        this.descriptor = new ModuleDescriptor();
+        this.courseid = 0;
     }
 
     // Getters and setters
@@ -48,14 +45,6 @@ public class Module implements Serializable{
 
     public void setCourseid(int courseid) {
         this.courseid = courseid;
-    }
-    
-    public ModuleDescriptor getDescriptor() {
-        return descriptor;
-    }
-
-    public void setDescriptor(ModuleDescriptor descriptor) {
-        this.descriptor = descriptor;
     }
     
     

@@ -31,8 +31,6 @@ public class ModuleRepository implements AbstractModuleRepository{
         query.append(module.getLecturerId());
         query.append(", ");
         query.append(module.getCourseid());
-        query.append(", ");
-        query.append(module.getDescriptor().getId());
         query.append(")");
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
@@ -50,8 +48,6 @@ public class ModuleRepository implements AbstractModuleRepository{
         query.append(module.getLecturerId());
         query.append(", courseid = ");
         query.append(module.getCourseid());
-        query.append(", mdid = ");
-        query.append(module.getDescriptor().getId());
         query.append(" WHERE id = ");
         query.append(module.getId());
         
