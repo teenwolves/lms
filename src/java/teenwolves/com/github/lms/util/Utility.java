@@ -30,6 +30,7 @@ public class Utility {
             HttpServletRequest request, 
             HttpServletResponse response, 
             String url, String message) throws IOException, ServletException{
+        request.setAttribute("message", message);
         context.getRequestDispatcher(url).forward(request, response);
     }
     
