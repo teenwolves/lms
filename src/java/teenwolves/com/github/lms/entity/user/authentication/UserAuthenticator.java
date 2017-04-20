@@ -52,7 +52,6 @@ public class UserAuthenticator {
         user = (User) session.getAttribute("user");
         if(user == null){
             Cookie userCookie= getCookie("lmsuser",request);
-            System.out.println("lmsuser" + userCookie.getValue());
             if(userCookie != null){
                 try {
                     // Search in Student
