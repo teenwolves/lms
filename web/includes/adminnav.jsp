@@ -42,6 +42,10 @@
         </ul>
       </li>
       <li><a href="#">Settings</a></li>
-    </ul>    
+    </ul>
+      <form action="../logout" method="get">
+          <input class="btn btn-default navbar-btn" type="submit" value="Log out">
+      </form>
+      
   </div>
 </nav>
