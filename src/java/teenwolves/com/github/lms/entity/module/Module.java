@@ -15,6 +15,8 @@ public class Module implements Serializable{
     private int id;
     private int lecturerId;
     private int courseid;
+    private String title;
+    private String description;
 
     public Module() {
         this.id = 0;
@@ -45,6 +47,22 @@ public class Module implements Serializable{
 
     public void setCourseid(int courseid) {
         this.courseid = courseid;
+    }
+
+    public String getTitle() {
+        return title;
+    }
+
+    public void setTitle(String title) {
+        this.title = title;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     
