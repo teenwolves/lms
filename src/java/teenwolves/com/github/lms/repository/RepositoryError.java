@@ -14,7 +14,8 @@ public enum RepositoryError {
     HALL_NOT_FOUND("Hall is not found."),
     COURSE_NOT_FOUND("Course is not found"),
     SESSIONS_NOT_FOUND("Sessions not found"),
-    SCHEDULE_NOT_FOUND("Schedule is not found");
+    SCHEDULE_NOT_FOUND("Schedule is not found"),
+    MODULES_NOT_FOUND("No module/s are found.");
     
     // Message for displaying purposes
     private String errorMessage;
