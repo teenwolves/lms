@@ -103,16 +103,16 @@ public class AdminRepository implements AbstractAdminRepository{
         StringBuilder query = new StringBuilder();
         query.append("UPDATE admin SET ");
         query.append("adminmanager = ");
-        query.append(admin.getAdminManager().toString());
+        query.append(admin.getAdminManager().toInt());
         query.append(", lecturermanager = ");
-        query.append(admin.getLecturerManager().toString());
+        query.append(admin.getLecturerManager().toInt());
         query.append(", schedulemanager = ");
-        query.append(admin.getScheduleManager().toString());
+        query.append(admin.getScheduleManager().toInt());
         query.append(", modulemanager = ");
-        query.append(admin.getModuleManager().toString());
+        query.append(admin.getModuleManager().toInt());
         query.append(" WHERE id = ");
         query.append(admin.getId());
-        
+        System.out.println("QUERY: " + query.toString());
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Admin is not updated");
         
