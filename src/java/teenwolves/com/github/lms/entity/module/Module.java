@@ -14,14 +14,14 @@ import java.io.Serializable;
 public class Module implements Serializable{
     private int id;
     private int lecturerId;
-    private int courseid;
+    private int facultyId;
     private String title;
     private String description;
 
     public Module() {
         this.id = 0;
         this.lecturerId = 0;
-        this.courseid = 0;
+        this.facultyId = 0;
     }
 
     // Getters and setters
@@ -41,12 +41,12 @@ public class Module implements Serializable{
         this.lecturerId = lecturerId;
     }
 
-    public int getCourseid() {
-        return courseid;
+    public int getFacultyId() {
+        return facultyId;
     }
 
-    public void setCourseid(int courseid) {
-        this.courseid = courseid;
+    public void setFacultyId(int facultyId) {
+        this.facultyId = facultyId;
     }
 
     public String getTitle() {

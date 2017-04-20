@@ -30,11 +30,11 @@ public class ModuleRepository implements AbstractModuleRepository{
     public void addModule(Module module) throws RepositoryException {
         StringBuilder query  = new StringBuilder();
         query.append("INSERT INTO module");
-        query.append("(lecturerid, courseid, title, description) ");
+        query.append("(lecturerid, facultyid, title, description) ");
         query.append("VALUES(");
         query.append(module.getLecturerId());
         query.append(", ");
-        query.append(module.getCourseid());
+        query.append(module.getFacultyId());
         query.append(", '");
         query.append(module.getTitle());
         query.append("' , '");
@@ -54,8 +54,8 @@ public class ModuleRepository implements AbstractModuleRepository{
         query.append("UPDATE module SET ");
         query.append("lecturerid = ");
         query.append(module.getLecturerId());
-        query.append(", courseid = ");
-        query.append(module.getCourseid());
+        query.append(", facultyid = ");
+        query.append(module.getFacultyId());
         query.append(", title = '");
         query.append(module.getTitle());
         query.append("', description = '");
@@ -99,7 +99,7 @@ public class ModuleRepository implements AbstractModuleRepository{
                 module = new Module();
                 module.setId(rows.getInt("id"));
                 module.setLecturerId(rows.getInt("lecturerid"));
-                module.setCourseid(rows.getInt("courseid"));
+                module.setFacultyId(rows.getInt("facultyid"));
                 module.setTitle(rows.getString("title"));
                 module.setDescription(rows.getString("description"));
                 
