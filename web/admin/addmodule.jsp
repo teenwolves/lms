@@ -16,10 +16,16 @@
         <%@include file="../includes/adminnav.jsp" %>
         <%@taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
         <div class="container">
+            <div class="row"><h1>Add Module</h1></div>
+        </div>
+        <div class="container">
+            <div class="row"><p>${message}</p></div>
+        </div>
+        <div class="container">
             <div class="row">
                 <section class="col-xs-12">
-
-                    <form class="form-horizontal">
+                    <form class="form-horizontal" action="addmodule" method="post">
+                        <input class="hidden" type="text" name="action" value="add">
                         <div class="form-group">
                             <label class="col-sm-2 control-label" for="title">Module Title</label>
                             <div class="col-sm-10">
@@ -39,9 +45,9 @@
                             </div>
                         </div>
                         <div class="form-group">
-                            <label class="col-sm-2 control-label" for="course">Faculty</label>
+                            <label class="col-sm-2 control-label" for="faculty">Faculty</label>
                             <div class="col-sm-10">
-                                <select name="course" class="form-control" id="course">
+                                <select name="faculty" class="form-control" id="faculty">
                                     <option value="1">Computing</option>
                                     <option value="2">Management</option>
                                     <option value="3">Engineering</option>
