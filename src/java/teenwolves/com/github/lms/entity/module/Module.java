@@ -22,6 +22,8 @@ public class Module implements Serializable{
         this.id = 0;
         this.lecturerId = 0;
         this.facultyId = 0;
+        title = "";
+        description = "";
     }
 
     // Getters and setters
