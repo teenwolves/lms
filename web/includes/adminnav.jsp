@@ -11,7 +11,7 @@
       <li>
         <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">Modules <span class="caret"></span></a>
         <ul class="dropdown-menu">
-          <li><a href="#">Add Module</a></li>
+          <li><a href="addmodule">Add Module</a></li>
           <li><a href="#">Update Module</a></li>
           <li><a href="#">Delete Module</a></li>
         </ul>
