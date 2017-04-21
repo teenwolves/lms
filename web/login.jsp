@@ -28,10 +28,11 @@
                         <div class="form-group">
                             <div class="col-sm-10 col-sm-offset-2">
                                 <input class="btn btn-success" type="submit" value="Login">
-                                <input class="btn btn-info" type="button" value="Sign up">
+                                <button form="signup" type="submit" class="btn btn-info">Sign up</button>
                             </div>
                         </div>
                     </form>
+                        <form id="signup" action="signup.jsp"></form>
                 </section>
             </div>
         </div>
