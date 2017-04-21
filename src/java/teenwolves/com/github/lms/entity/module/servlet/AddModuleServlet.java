@@ -160,7 +160,6 @@ public class AddModuleServlet extends HttpServlet {
                     // Adding the module
                     user.getModuleManager().addModule(module);
                     message = "Module Successfully Added.";
-                    url = "/admin/addmodule";
                 } catch (AdminBehaviourException ex) {
                     message = ex.getError().getMessage();
                 }
