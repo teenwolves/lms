@@ -134,6 +134,7 @@ public class ModuleServlet extends HttpServlet {
                     // Set attributes to dispatch
                     request.setAttribute("updatingModule", module);
                     request.setAttribute("lecturers", lecturers);
+                    request.setAttribute("selectedId", module.getLecturerId());
                     request.setAttribute("fileUrl", fileurl);
                     request.setAttribute("heading", heading);
                     // Dispatch the request
