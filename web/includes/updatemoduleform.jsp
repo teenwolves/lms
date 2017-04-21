@@ -13,7 +13,7 @@
                 <div class="form-group">
                     <label class="col-sm-2 control-label" for="id">ID</label>
                     <div class="col-sm-10">
-                        <input class="form-control hidden" type="text" name="id" value="${updatingAdmin.id}">
+                        <input class="form-control hidden" type="text" name="id" value="${updatingModule.id}">
                         <p class="form-control-static" id="id">${updatingModule.id}</p>
                     </div>
                 </div>
