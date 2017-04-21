@@ -7,11 +7,22 @@ package teenwolves.com.github.lms.entity.module.servlet;
 
 import java.io.IOException;
 import java.io.PrintWriter;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import teenwolves.com.github.lms.database.MySQLDatabase;
+import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
+import teenwolves.com.github.lms.entity.module.Module;
+import teenwolves.com.github.lms.entity.module.modulespecification.implementations.ModuleById;
+import teenwolves.com.github.lms.entity.user.User;
+import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
+import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
+import teenwolves.com.github.lms.util.Utility;
 
 /**
  *
@@ -19,7 +30,18 @@ import javax.servlet.http.HttpServletResponse;
  */
 @WebServlet(name = "UpdateModuleServlet", urlPatterns = {"/admin/updatemodule"})
 public class UpdateModuleServlet extends HttpServlet {
-
+    // Database to access
+    private MySQLDatabase database;
+    // UserAuthenticattor to authenticate user
+    private UserAuthenticator authenticator;
+    
+    // Overriding the init method to setup database and repositories
+    @Override
+    public void init() throws ServletException {
+        super.init();
+        database = new LmsMySQLDatabase();
+        authenticator = new UserAuthenticator(database);
+    }
     /**
      * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
      * methods.
@@ -58,7 +80,7 @@ public class UpdateModuleServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        doPost(request, response);
     }
 
     /**
@@ -72,7 +94,51 @@ public class UpdateModuleServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        processRequest(request, response);
+        // Message to display
+        String message = "";
+        String url = "/admin/addmodule.jsp";;
+        
+        // Authenticating the USer
+        User user = null;
+        try {
+            user = authenticator.getUser(request);
+        } catch (AuthenticationException ex) {
+            message = "Please login.";
+            url = "/admin/modules?action=view";
+            Utility.dispatchRequest(getServletContext(), request, response, url, message);
+        }
+        
+        // User authenticated
+        
+        String mid = request.getParameter("id");
+        String lecturer = request.getParameter("lecturer");
+        
+        if(Utility.hasPresence(mid) && Utility.hasPresence(lecturer)){
+            int id = Integer.parseInt(mid);
+            int lecturerId = Integer.parseInt(lecturer);
+            
+            try {
+                // Find the module to update
+                Module module = user.getModuleManager()
+                        .findModules(new ModuleById(id)).get(0);
+                // Update the module
+                module.setLecturerId(lecturerId);
+                
+                // Update the module in the database
+                user.getModuleManager().updateModule(module);
+                
+                message = "Update Successful.";
+            } catch (AdminBehaviourException ex) {
+                message = ex.getError().getMessage();
+                url = "/admin/modules?action=update";
+            }
+        }else{
+            message = "Please select the module update again.";
+            url = "/admin/modules?action=update";
+        }
+        
+        // Dispatching the request and response
+        Utility.dispatchRequest(getServletContext(), request, response, url, message);
     }
 
     /**
