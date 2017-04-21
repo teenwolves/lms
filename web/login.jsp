@@ -25,6 +25,12 @@
                 <section class="col-xs-12">
                     <form action="login" method="post" class="form-horizontal">
                         <%@include file="includes/loginform.jsp" %>
+                        <div class="form-group">
+                            <div class="col-sm-10 col-sm-offset-2">
+                                <input class="btn btn-success" type="submit" value="Login">
+                                <input class="btn btn-info" type="button" value="Sign up">
+                            </div>
+                        </div>
                     </form>
                 </section>
             </div>
