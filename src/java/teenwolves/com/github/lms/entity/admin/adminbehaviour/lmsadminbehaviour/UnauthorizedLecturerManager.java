@@ -5,11 +5,13 @@
  */
 package teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour;
 
+import java.util.List;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourError;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.LecturerManager;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 
 /**
  *
@@ -27,6 +29,11 @@ public class UnauthorizedLecturerManager implements LecturerManager{
         throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
     }
 
+    @Override
+    public List<Lecturer> findLecturers(UserSpecification specification) throws AdminBehaviourException {
+        throw new AdminBehaviourException(AdminBehaviourError.ACTION_DENIED);
+    }
+    
     @Override
     public int toInt() {
         return 0;

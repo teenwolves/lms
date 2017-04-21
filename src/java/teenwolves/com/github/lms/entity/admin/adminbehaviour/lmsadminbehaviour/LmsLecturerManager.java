@@ -5,6 +5,7 @@
  */
 package teenwolves.com.github.lms.entity.admin.adminbehaviour.lmsadminbehaviour;
 
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import teenwolves.com.github.lms.database.MySQLDatabase;
@@ -17,6 +18,7 @@ import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLect
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.entity.admin.adminbehaviour.LecturerManager;
+import teenwolves.com.github.lms.entity.user.userspecification.UserSpecification;
 
 /**
  *
@@ -54,6 +56,25 @@ public class LmsLecturerManager implements LecturerManager{
             error.setMessage("Lecturer is not deleted.");
             throw new AdminBehaviourException(error);
         }
+    }
+
+    @Override
+    public List<Lecturer> findLecturers(UserSpecification specification) throws AdminBehaviourException {
+        List<Lecturer> lecturers = null;
+        try {
+            lecturers = lecturerRepository.query(specification);
+        } catch (RepositoryException ex) {
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("No lecturers are found");
+            throw new AdminBehaviourException(error);
+        }
+        
+        if(lecturers == null){
+            AdminBehaviourError error = AdminBehaviourError.ACTION_FAILED;
+            error.setMessage("No lecturers are found");
+            throw new AdminBehaviourException(error);
+        }
+        return lecturers;
     }
 
     @Override
