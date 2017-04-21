@@ -9,9 +9,22 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+        <title>${heading}</title>
+        <%@include file="../includes/admincsslinks.jsp" %>
     </head>
     <body>
-        <h1>Hello World!</h1>
+        <%@include file="../includes/adminnav.jsp" %>
+        <div class="container">
+            <div class="row">
+                <h1 class="col-xs-12">${heading}</h1>
+            </div>
+        </div>
+            <div class="container">
+            <div class="row">
+                <p class="col-xs-12">${message}</p>
+            </div>
+        </div>
+        <jsp:include page="${fileUrl}" flush="true"/>
+        <%@include file="../includes/adminjsscripts.jsp" %>
     </body>
 </html>
