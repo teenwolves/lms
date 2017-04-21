@@ -26,6 +26,10 @@ public class ModuleRepository implements AbstractModuleRepository{
     
     private MySQLDatabase database;
 
+    public ModuleRepository(MySQLDatabase database) {
+        this.database = database;
+    }
+
     @Override
     public void addModule(Module module) throws RepositoryException {
         StringBuilder query  = new StringBuilder();
