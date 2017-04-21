@@ -17,9 +17,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import teenwolves.com.github.lms.database.MySQLDatabase;
 import teenwolves.com.github.lms.database.mysql.LmsMySQLDatabase;
+import teenwolves.com.github.lms.entity.admin.adminbehaviour.AdminBehaviourException;
 import teenwolves.com.github.lms.entity.lecturer.Lecturer;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.AbstractLecturerRepository;
 import teenwolves.com.github.lms.entity.lecturer.lecturerrepository.lmslecturerrepository.LecturerRepository;
+import teenwolves.com.github.lms.entity.user.User;
+import teenwolves.com.github.lms.entity.user.authentication.UserAuthenticator;
+import teenwolves.com.github.lms.entity.user.authentication.exception.AuthenticationException;
 import teenwolves.com.github.lms.entity.user.userspecification.implementations.AllUsers;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.util.Utility;
@@ -33,7 +37,7 @@ public class LecturerServlet extends HttpServlet {
     // Database to access
     private MySQLDatabase database;
     // LecturerRepository to access Lecturer Data
-    private AbstractLecturerRepository lecturerRepository;
+    private UserAuthenticator authenticator;
     
     // Overriding the init method
 
@@ -41,7 +45,7 @@ public class LecturerServlet extends HttpServlet {
     public void init() throws ServletException {
         super.init();
         database = new LmsMySQLDatabase();
-        lecturerRepository = new LecturerRepository(database);
+        authenticator = new UserAuthenticator(database);
     }
     
     /**
@@ -82,30 +86,50 @@ public class LecturerServlet extends HttpServlet {
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response)
             throws ServletException, IOException {
-        String action = request.getParameter("action");
-        String url = null;
+        String url = "/admin/lecturers.jsp";
         String message = "";
+        String heading = "";
+        String fileUrl = "";
+
+        // Authenticating the user
+        User user = null;
+        try {
+            user = authenticator.getUser(request);
+        } catch (AuthenticationException ex) {
+            url = "/admin/login.jsp";
+            message = "Please Login.";
+            Utility.dispatchRequest(getServletContext(), request, response, url, message);
+        }
+        
+        // User has been authenticated
+        String action = request.getParameter("action");
+        
         // Setting default action
         if(!Utility.hasPresence(action)){
             action = "view";
         }
         // Setting dispatching urls
         if(action.equals("delete")){
-            url = "/admin/deletelecturer.jsp";
+            fileUrl = "../includes/deletelecturers.jsp";
+            heading = "Delete Lecturers";
         }else{
-            url = "/admin/lecturers.jsp";
+            fileUrl = "../includes/lecturerstable.jsp";
+            heading = "All Lecturers";
         }
         
         try {
-            List<Lecturer> lecturers = lecturerRepository.query(new AllUsers());
+            List<Lecturer> lecturers = user.getLecturerManager()
+                    .findLecturers(new AllUsers());
             // Setting the lecturers as an attribute 
             request.setAttribute("lecturers", lecturers);
-        } catch (RepositoryException ex) {
-            message = ex.getError().getErrorMessage();
+        } catch (AdminBehaviourException ex) {
+            message = ex.getError().getMessage();
         }
-        
+        // Setting data to send
+        request.setAttribute("fileUrl", fileUrl);
+        request.setAttribute("heading", heading);
         // Dispatching the request
-        getServletContext().getRequestDispatcher(url).forward(request, response);
+        Utility.dispatchRequest(getServletContext(), request, response, url, message);
     }
 
     /**
