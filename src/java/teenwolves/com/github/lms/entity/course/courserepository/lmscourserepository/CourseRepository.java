@@ -14,7 +14,6 @@ import teenwolves.com.github.lms.database.MySQLDatabaseException;
 import teenwolves.com.github.lms.entity.course.Course;
 import teenwolves.com.github.lms.entity.course.courserepository.AbstractCourseRepository;
 import teenwolves.com.github.lms.entity.course.courserepository.CourseSpecification;
-import teenwolves.com.github.lms.entity.course.faculty.Faculty;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
 import teenwolves.com.github.lms.repository.RepositoryUtility;
@@ -35,14 +34,14 @@ public class CourseRepository implements AbstractCourseRepository{
     public void addCourse(Course course) throws RepositoryException {
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO course(");
-        query.append("directorid, coursecode, coursename, faculty) VALUES('");
-        query.append(course.getCourseDirectorId());
+        query.append("directorid, coursecode, coursename, facultyid, coursename) VALUES('");
+        query.append(course.getDirectorId());
         query.append("','");
         query.append(course.getCourseCode());
         query.append("','");
-        query.append(course.getCourseName());
+        query.append(course.getFacultyId());
         query.append("','");
-        query.append(course.getFaculty().toString());
+        query.append(course.getCourseName());
         query.append("')");
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
@@ -56,15 +55,15 @@ public class CourseRepository implements AbstractCourseRepository{
         StringBuilder query = new StringBuilder();
         query.append("UPDATE course SET ");
         query.append("directorid = '");
-        query.append(course.getCourseDirectorId());
+        query.append(course.getDirectorId());
         query.append("', coursecode = '");
         query.append(course.getCourseCode());
         query.append("', coursename = '");
         query.append(course.getCourseName());
-        query.append("', faculty = '");
-        query.append(course.getFaculty().toString());
+        query.append("', facultyid = '");
+        query.append(course.getFacultyId());
         query.append("' WHERE id = ");
-        query.append(course.getCourseId());
+        query.append(course.getId());
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Course is not updated.");
@@ -76,7 +75,7 @@ public class CourseRepository implements AbstractCourseRepository{
     public void deleteCourse(Course course) throws RepositoryException {
         StringBuilder query = new StringBuilder();
         query.append("DELETE FROM course WHERE id=");
-        query.append(course.getCourseId());
+        query.append(course.getId());
         
         RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
         error.setErrorMessage("Course is not deleted.");
@@ -100,19 +99,11 @@ public class CourseRepository implements AbstractCourseRepository{
             Course course = null;
             while(rows.next()){
                 course = new Course();
-                course.setCourseId(rows.getInt("id"));
-                course.setCourseDirectorId(rows.getInt("directorid"));
+                course.setId(rows.getInt("id"));
+                course.setFacultyId(rows.getInt("facultyid"));
+                course.setDirectorId(rows.getInt("directorid"));
                 course.setCourseCode(rows.getString("coursecode"));
                 course.setCourseName(rows.getString("coursename"));
-                
-                String faculty = rows.getString("faculty");
-                if(faculty.equals(Faculty.COMPUTING.toString())){
-                    course.setFaculty(Faculty.COMPUTING);
-                }else if(faculty.equals(Faculty.MANAGEMENT.toString())){
-                    course.setFaculty(Faculty.MANAGEMENT);
-                }else if(faculty.equals(Faculty.ENGINEERING.toString())){
-                    course.setFaculty(Faculty.ENGINEERING);
-                }
                 
                 if(specification.specified(course)){
                     if(courses == null){
