@@ -13,7 +13,7 @@
         <%@include file="includes/csslinks.jsp" %>
     </head>
     <body>
-        <%@include file="includes/adminnav.jsp" %>
+        <%@include file="includes/generalnav.jsp" %>
         <%@include file="includes/jsscripts.jsp" %>
     </body>
 </html>
