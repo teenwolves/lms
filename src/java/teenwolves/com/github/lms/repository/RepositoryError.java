@@ -16,6 +16,7 @@ public enum RepositoryError {
     SESSIONS_NOT_FOUND("Sessions not found"),
     SCHEDULE_NOT_FOUND("Schedule is not found"),
     MODULES_NOT_FOUND("No module/s are found."),
+    FACULTIES_NOT_FOUND("Faculties are not found"),
     BATCHES_NOT_FOUND("Batches are not found");
     
     // Message for displaying purposes
