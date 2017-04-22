@@ -6,36 +6,40 @@
 package teenwolves.com.github.lms.entity.course;
 
 import java.io.Serializable;
-import teenwolves.com.github.lms.entity.course.faculty.Faculty;
 
 /**
  *
  * @author Sudarshana Panditha
  */
 public class Course implements Serializable{
-    private int courseId;
-    private int courseDirectorId;
+    private int id;
+    private int directorId;
     private String courseCode;
+    private int facultyId;
     private String courseName;
-    private Faculty faculty;
 
     public Course() {
+        id = 0;
+        directorId = 0;
+        courseCode = "";
+        facultyId = 0;
+        courseName = "";
     }
 
-    public int getCourseId() {
-        return courseId;
+    public int getId() {
+        return id;
     }
 
-    public void setCourseId(int courseId) {
-        this.courseId = courseId;
+    public void setId(int id) {
+        this.id = id;
     }
 
-    public int getCourseDirectorId() {
-        return courseDirectorId;
+    public int getDirectorId() {
+        return directorId;
     }
 
-    public void setCourseDirectorId(int courseDirectorId) {
-        this.courseDirectorId = courseDirectorId;
+    public void setDirectorId(int directorId) {
+        this.directorId = directorId;
     }
 
     public String getCourseCode() {
@@ -46,6 +50,14 @@ public class Course implements Serializable{
         this.courseCode = courseCode;
     }
 
+    public int getFacultyId() {
+        return facultyId;
+    }
+
+    public void setFacultyId(int facultyId) {
+        this.facultyId = facultyId;
+    }
+
     public String getCourseName() {
         return courseName;
     }
@@ -53,14 +65,5 @@ public class Course implements Serializable{
     public void setCourseName(String courseName) {
         this.courseName = courseName;
     }
-
-    public Faculty getFaculty() {
-        return faculty;
-    }
-
-    public void setFaculty(Faculty faculty) {
-        this.faculty = faculty;
-    }
-    
     
 }
