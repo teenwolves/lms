@@ -49,7 +49,7 @@ public class ScheduleRepository implements AbstractScheduleRepository{
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO schedule(");
         query.append("courseid, year, semester) VALUES(");
-        query.append(schedule.getCourse().getCourseId());
+        query.append(schedule.getCourse().getId());
         query.append(",");
         query.append(schedule.getYear());
         query.append(",");
@@ -67,7 +67,7 @@ public class ScheduleRepository implements AbstractScheduleRepository{
         StringBuilder query = new StringBuilder();
         query.append("UPDATE schedule SET ");
         query.append("courseid = ");
-        query.append(schedule.getCourse().getCourseId());
+        query.append(schedule.getCourse().getId());
         query.append(", year = ");
         query.append(schedule.getYear());
         query.append(", semester = ");
