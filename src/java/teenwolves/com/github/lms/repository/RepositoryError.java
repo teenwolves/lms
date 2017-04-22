@@ -15,7 +15,8 @@ public enum RepositoryError {
     COURSE_NOT_FOUND("Course is not found"),
     SESSIONS_NOT_FOUND("Sessions not found"),
     SCHEDULE_NOT_FOUND("Schedule is not found"),
-    MODULES_NOT_FOUND("No module/s are found.");
+    MODULES_NOT_FOUND("No module/s are found."),
+    BATCHES_NOT_FOUND("Batches are not found");
     
     // Message for displaying purposes
     private String errorMessage;
