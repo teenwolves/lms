@@ -22,7 +22,7 @@ public class CourseById implements CourseSpecification{
     
     @Override
     public boolean specified(Course course) {
-        return courseId == course.getCourseId();
+        return courseId == course.getId();
     }
     
 }
