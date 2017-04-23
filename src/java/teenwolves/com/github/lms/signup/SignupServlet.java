@@ -155,19 +155,34 @@ public class SignupServlet extends HttpServlet {
             String password = request.getParameter("password");
             String email = request.getParameter("email");
             
+            String batch = request.getParameter("batch");
+            String course = request.getParameter("course");
+            
             boolean isDataHasPresence = Utility.hasPresence(name) 
                     && Utility.hasPresence(username) 
                     && Utility.hasPresence(password) 
-                    && Utility.hasPresence(email);
+                    && Utility.hasPresence(email)
+                    && Utility.hasPresence(batch)
+                    && Utility.hasPresence(course);
             url = "/signup?action=signup";
             if(isDataHasPresence){
                 Student student = new Student();
+                name = Utility.inputFormat(name);
+                username = Utility.inputFormat(username);
+                password = Utility.inputFormat(password);
+                email = Utility.inputFormat(email);
+                batch = Utility.inputFormat(batch);
+                course = Utility.inputFormat(course);
+                
+                int courseId = Integer.parseInt(course);
                 // Setting student attributes
                 try {
                     student.setName(name);
                     student.setUsername(username);
                     student.setPassword(password);
                     student.setEmail(email);
+                    student.setBatchId(batch);
+                    student.setCourseId(courseId);
                     
                     // Add the Student to the database
                     studentRepository.addStudent(student);
