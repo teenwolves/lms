@@ -24,6 +24,7 @@ import teenwolves.com.github.lms.entity.userrepository.AbstractUserRepository;
 import teenwolves.com.github.lms.entity.userrepository.lmsuserrepository.UserRepository;
 import teenwolves.com.github.lms.repository.RepositoryError;
 import teenwolves.com.github.lms.repository.RepositoryException;
+import teenwolves.com.github.lms.repository.RepositoryUtility;
 
 /**
  * <code>StudentRepository</code> class is an implementation of the 
@@ -44,16 +45,37 @@ public class StudentRepository implements AbstractStudentRepository{
     
     @Override
     public void addStudent(Student student) throws RepositoryException {
+        //User object to get the added user
+        List<User> users = null;
+        User user = null;
+        // Catching any exception thrown when adding to the user table
         try{
             userRepository.addUser(student);
+            users = userRepository.query(new AllUsers());
+            user = getUserForStudent(student, users);
+            
+            student.setAttributes(user);
         }catch(RepositoryException re){
             throw re;
+        } catch (UserException ex) {
+            RepositoryError error = RepositoryError.TECHNICAL_ERROR;
+            error.setErrorMessage(ex.getError().getMessage());
+            throw new RepositoryException(error);
         }
         
         StringBuilder query = new StringBuilder();
         query.append("INSERT INTO student VALUES(");
         query.append(student.getId());
         query.append(", ");
+        query.append(student.getCourseId());
+        query.append(", '");
+        query.append(student.getBatchId());
+        query.append("')");
+        
+        RepositoryError error = RepositoryError.UNSUCCESSFUL_EXECUTION;
+        error.setErrorMessage("Student is not added");
+        
+        RepositoryUtility.executeQuery(database, query.toString(), error);
     }
 
     @Override
@@ -73,12 +95,12 @@ public class StudentRepository implements AbstractStudentRepository{
         String query = "SELECT * FROM student";
         
         if(specification.getClass() == StudentSpecification.class){
-            students = specifyLecturers(query, specification);
+            students = specifyStudents(query, specification);
         }else{
             try{
                 users = userRepository.query(specification);
-                students = getUserLecturerIntersection(users, 
-                        specifyLecturers(query, new AllUsers()));
+                students = getUserStudentIntersection(users, 
+                        specifyStudents(query, new AllUsers()));
             }catch(RepositoryException re){
                 throw re;
             }
@@ -91,7 +113,7 @@ public class StudentRepository implements AbstractStudentRepository{
         
     }
     
-    private List<Student> specifyLecturers(String query, UserSpecification specification) throws RepositoryException{
+    private List<Student> specifyStudents(String query, UserSpecification specification) throws RepositoryException{
         List<Student> students = null;
         try {
             // Connecting to the database
@@ -126,7 +148,7 @@ public class StudentRepository implements AbstractStudentRepository{
         return students;
     }
     
-    private List<Student> getUserLecturerIntersection(List<User> users, List<Student> students) throws RepositoryException{
+    private List<Student> getUserStudentIntersection(List<User> users, List<Student> students) throws RepositoryException{
         List<Student> outputStudents = null;
         if(students == null){
             throw new RepositoryException(RepositoryError.USER_NOT_FOUND);
@@ -150,7 +172,7 @@ public class StudentRepository implements AbstractStudentRepository{
         return outputStudents;
     }
     
-    private User getUserForLecturer(Student student,List<User> users) throws RepositoryException{
+    private User getUserForStudent(Student student,List<User> users) throws RepositoryException{
         User outputUser = null;
         for (User user : users) {
             if(user.equals(student)){
