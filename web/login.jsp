@@ -32,7 +32,7 @@
                             </div>
                         </div>
                     </form>
-                        <form id="signup" action="signup.jsp"></form>
+                        <form id="signup" action="signup?action=signup" method="post"></form>
                 </section>
             </div>
         </div>
