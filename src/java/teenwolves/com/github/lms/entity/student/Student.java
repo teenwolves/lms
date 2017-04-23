@@ -14,8 +14,9 @@ import teenwolves.com.github.lms.entity.user.User;
  */
 public class Student extends User implements Serializable{
 
-    private Instructor instructor;
     private List<Module> modules;
+    private String batchId;
+    private int courseId;
     
     public Student() {
         super();
@@ -25,14 +26,6 @@ public class Student extends User implements Serializable{
         
     }
 
-    public Instructor getInstructor() {
-        return instructor;
-    }
-
-    public void setInstructor(Instructor instructor) {
-        this.instructor = instructor;
-    }
-
     public List<Module> getModules() {
         return modules;
     }
@@ -40,5 +33,22 @@ public class Student extends User implements Serializable{
     public void setModules(List<Module> modules) {
         this.modules = modules;
     }
+
+    public String getBatchId() {
+        return batchId;
+    }
+
+    public void setBatchId(String batchId) {
+        this.batchId = batchId;
+    }
+
+    public int getCourseId() {
+        return courseId;
+    }
+
+    public void setCourseId(int courseId) {
+        this.courseId = courseId;
+    }
+    
     
 }
