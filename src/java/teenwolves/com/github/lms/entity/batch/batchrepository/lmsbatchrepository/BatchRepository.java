@@ -26,9 +26,9 @@ import teenwolves.com.github.lms.repository.RepositoryUtility;
 public class BatchRepository implements AbstractBatchRepository{
     
     private MySQLDatabase database;
-    
-    public BatchRepository(){
-        database = new LmsMySQLDatabase();
+
+    public BatchRepository(MySQLDatabase database) {
+        this.database = database;
     }
 
     @Override
